@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import  Question,Choice
 # Register your models here.
-from .models import Mark
+from .models import UserProfile
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -17,5 +17,5 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
 
 admin.site.register(Question,QuestionAdmin)
-admin.site.register(Mark)
+admin.site.register(UserProfile)
 #admin.site.register(Answer,answer)
