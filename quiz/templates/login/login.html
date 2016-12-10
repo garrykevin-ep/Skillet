@@ -1,0 +1,16 @@
+{% if error_message %}
+<strong>
+<p>{{error_message}}</p>
+</strong><br>
+{% endif %}
+
+<form action="{% url 'quiz:auth' %}"   method="post">
+{% csrf_token %}
+    <label>Username</label>
+    <input type="text" name="user_name">
+    <br>
+    <label>Password</label>
+    <input type="password" name="password">
+    <br>
+    <input type="submit" name="Login" >
+</form>
