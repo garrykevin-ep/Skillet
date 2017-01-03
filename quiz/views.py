@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
 from django.http import HttpResponse,HttpResponseRedirect
 from  django.urls import reverse
 from django.shortcuts import get_object_or_404,render,redirect
 from django.contrib.auth import authenticate,login
-from .models import Question,Choice,UserProfile
+from .models import Question,Choice
+from login.models import UserProfile
 
 def auth_login(request):
     return render(request,'login/login.html')

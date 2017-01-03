@@ -4,7 +4,7 @@
 </strong><br>
 {% endif %}
 
-<form action="{% url 'quiz:auth' %}"   method="post">
+<form action="{% url 'login:auth' %}"   method="post">
 {% csrf_token %}
     <label>Username</label>
     <input type="text" name="user_name">
@@ -12,5 +12,5 @@
     <label>Password</label>
     <input type="password" name="password">
     <br>
-    <input type="submit" name="Login" >
+    <input type="submit" name="Login" value ="login" >
 </form>
