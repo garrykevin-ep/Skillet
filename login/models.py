@@ -6,9 +6,9 @@ from django.db.models.signals import post_save
 
 #To save mark and ph_no a user
 class UserProfile(models.Model):
-    user = models.OneToOneField(User,related_name= 'profile')
+    user = models.OneToOneField(User,related_name= 'profile',on_delete=models.CASCADE,primary_key=True)
     mark = models.IntegerField(default= 0)
-    ph_no = models.IntegerField(max_length=10,null = True)
+    ph_no = models.IntegerField(null = True)
 
     def __str__(self):
         return 'Profile of user: {}'.format(self.user.username)
@@ -19,3 +19,4 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
 #used signal 
 post_save.connect(create_user_profile, sender=User)
+
