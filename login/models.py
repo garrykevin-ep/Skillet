@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     ph_no = models.IntegerField(null = True)
 
     def __str__(self):
-        return 'Profile of user: {}'.format(self.user.username)
+        return 'Profile of user: {} -- mark = {} '.format(self.user.username,self.mark)
 
 #To populate when a user is registered
 def create_user_profile(sender, instance, created, **kwargs):

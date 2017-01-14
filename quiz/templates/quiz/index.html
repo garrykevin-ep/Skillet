@@ -1,15 +1,35 @@
-<h1>{{question.question_text}}</h1>
-
-{% if error_message %}
-<p><strong>{{error_message}}</strong></p>
+{% for x in status %}
+{% if x.question.id == question.id %} 
+<h1> 
+{{forloop.counter}})
+{{question.question_text}}</h1>
 {% endif %}
+{% endfor %}
 
 <form action="{% url 'quiz:ans' question.id %}" method="post">
     {% csrf_token %}
     {% for choice in question.choice_set.all %}
+    {% if current_status.selected == choice.id %}
+    <input type="radio" name="choice" value="{{choice.id}}" checked = "checked"/>
+    {% else %}
     <input type="radio" name="choice" value="{{choice.id}}" />
+    {% endif %}
     <label>{{choice.choice_text}}</label> <br>
     {% endfor %}
-    <input type="submit" value="answer">
-
+    {%if question.id != first_question %}
+    <a href="{% url 'quiz:ans' pre_question  %}">
+    previous
+    </a>
+    {% endif %}
+    {% if question.id != last_question%}
+    <input type="submit" value="next">
+    {% else %}
+    <input type="submit" value="Finish">    
+    {% endif %} 
 </form>
+<br>
+{% for x in status %}
+{{forloop.counter}}<span>  --- </span>
+{{x.Qstatus}}
+<br>
+{% endfor %}

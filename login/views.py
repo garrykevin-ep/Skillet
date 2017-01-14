@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 #user defined
 from .models import UserProfile
+from quiz.models import Question
 from .form import RegisterForm
 
 
@@ -19,7 +21,8 @@ def auth(request):
     if User is not None:
             if User.is_active:
                 login(request,User)
-                return HttpResponseRedirect(reverse('quiz:index',args = (1,)))
+                return redirect('quiz:pop')
+                #return HttpResponseRedirect(reverse('quiz:ans',args = (first_question(),)))
     else:
         return render(request,'login/login.html',{'error_message' : "Wrong Pass",
                                                   'x' : pasword})
@@ -57,3 +60,8 @@ def ph_save(user,number):
     usr_pro = UserProfile.objects.get(user = user.id)
     usr_pro.ph_no = number
     usr_pro.save()
+
+def first_question():
+    list = Question.objects.all()
+    list = list[0]
+    return list.id
