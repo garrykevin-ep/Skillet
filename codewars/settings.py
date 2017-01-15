@@ -122,3 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_PROFILE_MODULE = 'accounts.User_profile'
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = "/home/garrykevin/codewars/static"
