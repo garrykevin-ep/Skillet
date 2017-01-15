@@ -4,7 +4,7 @@
 </strong><br>
 {% endif %}
 
-<h1>Careful user name should not repeat</h1>
+<h1>Register only once</h1>
 
 <form action="{% url 'login:register' %}"   method="post">
 {% csrf_token %}

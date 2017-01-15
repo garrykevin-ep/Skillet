@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect,Http404
 from  django.urls import reverse
-from django.shortcuts import get_object_or_404,render,get_list_or_404
+from django.shortcuts import get_object_or_404,render,get_list_or_404,redirect
 from .models import Question,Choice,Status
 from login.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -112,7 +112,8 @@ def disp_next_question(question,pk):
     if(next_Question != None):
             return HttpResponseRedirect(reverse('quiz:ans',args = (next_Question,)))
     else:
-        return HttpResponse("Thank You") #need to check how many left unanswerd
+        return redirect('login:logout')
+        #return HttpResponse("Thank You") #need to check how many left unanswerd
 
 def disp(request,pk): 
     list = Question.objects.all()
