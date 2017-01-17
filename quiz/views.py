@@ -48,6 +48,14 @@ def prev_question(pk):
     else:
         return None
 
+def nth_question(request,pk):
+    qlist = Question.objects.all()
+    pk = int(pk)
+    pk = pk -1
+    return redirect('quiz:ans',pk = qlist[pk].id)
+    #return ans(request,qlist[pk].id)
+    
+
 @login_required(login_url = '/')
 def ans(request,pk):
     current_user = request.user
@@ -103,8 +111,8 @@ def disp_question(request,pk,current_user,question):
     'last_question' : last_question,
     'pre_question' : pre_question,
     'status'  : status,
-    'current_status' : current_status,
-    }
+    'current_status' : current_status, 
+   }
     return render(request,'quiz/index.html',dic)
 
 def disp_next_question(question,pk):
@@ -116,8 +124,7 @@ def disp_next_question(question,pk):
         #return HttpResponse("Thank You") #need to check how many left unanswerd
 
 def disp(request,pk): 
-    list = Question.objects.all()
-    len_lst = len(list)
-    list = list[len_lst-1]
-    return HttpResponse(next_question(pk))
-    
+    qlist = Question.objects.all()
+    pk = int(pk)
+    pk = pk -1
+    return HttpResponse(qlist[pk].id)

@@ -1,8 +1,49 @@
+{% extends 'login/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{%block content%}
+
+<div class = "row">
+
+<div id = "logo" class = "col-lg-12 col-md-12 col-sm-12 col-xs-12">
+</div>
+
+<div class = "col-lg-1 col-md-2 col-sm-2 col-xs-3" id =
+"leftbox">
+{# side nav bar #}
+{% for x in status %}
+<a href = "{% url "quiz:nq" forloop.counter %}"> 
+
+{{forloop.counter}}    <span>  --- </span>
+{{x.Qstatus}}
+
+</a>
+<br>
+{% endfor %}
+
+</div>
+
+
+<div class = "col-lg-10 col-md-10 col-sm-10 col-xs-8">
+{# for Question number #}
+<div class= "panel panel-info">
+
+<div class = "panel panel-heading">
 {% for x in status %}
 {% if x.question.id == question.id %} 
-<h1> 
-{{forloop.counter}})
-{{question.question_text}}</h1>
+<h1 class="panel-title"> 
+Question {{forloop.counter}}
+</h1>
+</div>
+
+<div class = "panel-body">
+<h1 >{{question.question_text}}
+</h1>
+</div>
+</div>
 {% endif %}
 {% endfor %}
 
@@ -24,12 +65,11 @@
     {% if question.id != last_question%}
     <input type="submit" value="next">
     {% else %}
-    <input type="submit" value="Finish">    
+    <input class="btn btn-primary btn-block btn-large" type="submit" value="Finish">    
     {% endif %} 
 </form>
-<br>
-{% for x in status %}
-{{forloop.counter}}<span>  --- </span>
-{{x.Qstatus}}
-<br>
-{% endfor %}
+
+
+</div>
+</div>
+{% endblock %}
