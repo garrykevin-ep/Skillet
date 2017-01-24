@@ -1,75 +1,97 @@
 {% extends 'login/base.html' %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'quiz/css/index.css' %}">
+<script type="text/javascript" src="{% static 'quiz/js/index.js' %}"></script>
 {% endblock %}
 
 {%block content%}
 
-<div class = "row">
+<div class="container">
+        
+<div id="box" class="row">
 
-<div id = "logo" class = "col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div id="logo" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 </div>
 
-<div class = "col-lg-1 col-md-2 col-sm-2 col-xs-3" id =
-"leftbox">
-{# side nav bar #}
-{% for x in status %}
-<a href = "{% url "quiz:nq" forloop.counter %}"> 
-
-{{forloop.counter}}    <span>  --- </span>
-{{x.Qstatus}}
-
-</a>
-<br>
-{% endfor %}
-
+<div class="row">
+<div class="col-lg-5">
+{# Timer #}    
+    <p>Timer</p>
 </div>
 
-
-<div class = "col-lg-10 col-md-10 col-sm-10 col-xs-8">
-{# for Question number #}
-<div class= "panel panel-info">
-
-<div class = "panel panel-heading">
-{% for x in status %}
-{% if x.question.id == question.id %} 
-<h1 class="panel-title"> 
-Question {{forloop.counter}}
-</h1>
-</div>
-
-<div class = "panel-body">
-<h1 >{{question.question_text}}
-</h1>
-</div>
+{% for x  in status %}
+{% if x.question.id == question.id %}
+{# click div #}
+<div id="dstat" onclick="curStat()" class="col-lg-2 col-lg-push-5 status-btn {{x.Qstatus}}">
 </div>
 {% endif %}
 {% endfor %}
+
+<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+
+<div class="panel panel-info">
+
+<div class="panel panel-heading">
+{% for x in status %}
+{% if x.question.id == question.id %}
+<h1 class="panel-title"> 
+Question {{forloop.counter}}
+{% endif %}
+{% endfor %}
+</h1>
+</div>
+{# display question #}
+<div class="panel-body">
+<h1>{{question.question_text}}
+</h1>
+</div>
+</div>
 
 <form action="{% url 'quiz:ans' question.id %}" method="post">
     {% csrf_token %}
     {% for choice in question.choice_set.all %}
     {% if current_status.selected == choice.id %}
-    <input type="radio" name="choice" value="{{choice.id}}" checked = "checked"/>
+    <input type="radio" onclick="hi()" name="choice" value="{{choice.id}}" checked = "checked"/>
     {% else %}
-    <input type="radio" name="choice" value="{{choice.id}}" />
+    <input type="radio" onclick="hi()" name="choice" value="{{choice.id}}" />
     {% endif %}
     <label>{{choice.choice_text}}</label> <br>
     {% endfor %}
+    
+   <div class="nav col-lg-12">
     {%if question.id != first_question %}
-    <a href="{% url 'quiz:ans' pre_question  %}">
+    <a class = "btn btn-primary" href="{% url 'quiz:ans' pre_question  %}">
     previous
     </a>
     {% endif %}
     {% if question.id != last_question%}
-    <input type="submit" value="next">
+    <input class = "btn btn-primary" type="submit" value="next">
     {% else %}
-    <input class="btn btn-primary btn-block btn-large" type="submit" value="Finish">    
-    {% endif %} 
+    <input class="btn btn-primary" type="submit" value="Finish">  
+    {% endif %}
+   </div>
+   {# hidden inp  #}
+   {% for x in status %}
+   {% if x.question.id == question.id %}
+   <input type ="hidden" id="status" name="status" value={{x.Qstatus}}>
+   {% endif %}
+   {% endfor %}
 </form>
 
+</div>
 
+<div id="rightbox" class="col-lg-1">
+{% for x in status %}
+<a id="side" href="{% url 'quiz:nq' forloop.counter %}" class="btn  hidden-xs {{x.Qstatus}}">
+	{{forloop.counter}}
+</a>
+{% endfor %}
+</div>
+
+
+
+</div>
 </div>
 </div>
 {% endblock %}

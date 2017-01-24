@@ -64,6 +64,9 @@ def ans(request,pk):
     #return HttpResponse(status)
     if request.method == 'POST':
         #when data is sent
+        Qstatus = request.POST['status']
+        status.Qstatus = Qstatus
+        print status.Qstatus
         try:
             value = request.POST['choice']
             selected_choice = question.choice_set.get(pk = value)
