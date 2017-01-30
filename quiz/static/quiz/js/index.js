@@ -130,6 +130,14 @@ function init() {
 function dob(x)
 {
 	x.click();
-	x.click();
-	
+	x.click();	
 }
+
+$(function(){
+$('#ms_timer').countdowntimer({
+minutes :20,
+seconds : 10,
+size : "lg"
+});
+});
+

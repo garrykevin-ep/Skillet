@@ -89,3 +89,19 @@ form{
 #ds{
 	height: 10px;
 }
+.countdowntimer{
+	margin-left: 10px;
+	margin-bottom: 20px;
+}
+
+#end{
+	width: 80px;
+	height: 25px;
+	margin-top: 5px;
+}
+
+#end h5{
+	margin: 0px;
+	padding-bottom: 10px;
+}
+

@@ -1,6 +1,10 @@
 {% extends 'login/base.html' %}
 {% load static %}
 {% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'quiz/css/jquery.countdownTimer.css' %}"/>
+<script type="text/javascript" src="{% static 'quiz/js/jquery.countdownTimer.min.js'  %}"></script>
+
+
 <link rel="stylesheet" href="{% static 'quiz/css/index.css' %}">
 <script type="text/javascript" src="{% static 'quiz/js/index.js' %}"></script>
 {% endblock %}
@@ -12,12 +16,15 @@
 <div id="box" class="row">
 
 <div id="logo" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+ <div id="end" class = "col-lg-2 col-lg-push-10 btn btn-info">
+  <h5>End Test</h5>
+  </div>
+
 </div>
 
 <div class="row">
-<div class="col-lg-5">
-{# Timer #}    
-    <p>Timer</p>
+<div class = "countdowntimer col-lg-5">
+<span id="ms_timer"></span>
 </div>
 
 {% for x  in status %}
