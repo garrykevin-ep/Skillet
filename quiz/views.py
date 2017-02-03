@@ -13,7 +13,7 @@ def s_pop(request):
     qlist = Question.objects.all()
     for x in qlist:
         Status.objects.get_or_create(User = current_user,question = x)
-    return HttpResponseRedirect(reverse('quiz:ans',args = (first_question(),)))
+    return HttpResponseRedirect(reverse('quiz:disp',args = (first_question().id,)))
 
 def no_of_Question():
     return len(Question.objects.all())
@@ -21,79 +21,96 @@ def no_of_Question():
 def first_question():
     list = Question.objects.all()
     list = list[0]
-    return list.id
+    return list
 
 def last_question():
     list = Question.objects.all()
     len_lst = len(list)
     list = list[len_lst-1]
-    return list.id
+    return list
 
 def next_question(pk):
     pk = int(pk)
     if pk != last_question():
         list = Question.objects.filter(id__gt = pk)
         list = list[0]
-        return list.id
+        return list
     else:
         return None
 
 def prev_question(pk):
     pk = int(pk)
-    if pk != first_question():
+    if pk != first_question().id:
         list = Question.objects.filter(id__lt = pk) 
         len_lst  = len(list)
-        list = list[len_lst-1]
-        return list.id
+        len_lst = len_lst-1
+        list = list[len_lst]
+        return list
     else:
         return None
 
-def nth_question(request,pk):
+#go to nth question //not used //needs review
+def nth_question(pk):
     qlist = Question.objects.all()
     pk = int(pk)
     pk = pk -1
-    return redirect('quiz:ans',pk = qlist[pk].id)
+    return qlist[pk]
     #return ans(request,qlist[pk].id)
     
 
 @login_required(login_url = '/')
+def disp(request,pk):
+    question = get_object_or_404(Question,pk=pk)
+    current_user = request.user
+    if request.method == 'POST':
+        nav = request.POST['nav']
+        ans(request,pk)
+        if nav  == 'Next':
+            return disp_next_question(question,pk)
+        elif nav == 'Previous':
+            prev_q = prev_question(pk)
+            return HttpResponseRedirect(reverse('quiz:disp',args = (prev_q.id,)))
+        else:
+            nth_q = nth_question(nav)
+            return HttpResponseRedirect(reverse('quiz:disp',args = (nth_q.id,)))
+    else:
+        return disp_question(request,pk,current_user,question)
+
+@login_required(login_url = '/')
+#actually ans post always
 def ans(request,pk):
     current_user = request.user
     question = get_object_or_404(Question,pk=pk)
-    status, created = Status.objects.get_or_create(User = current_user,question = question)
-    #return HttpResponse(status)
-    if request.method == 'POST':
-        #when data is sent
-        Qstatus = request.POST['status']
-        status.Qstatus = Qstatus
-        print status.Qstatus
-        try:
-            value = request.POST['choice']
-            selected_choice = question.choice_set.get(pk = value)
-        except(KeyError, Choice.DoesNotExist):
+    status, created = Status.objects.get_or_create(User = current_user,question = question) 
+    mark = UserProfile.objects.get(user = current_user.id)
+    status.Qstatus = request.POST['status']
+    status.save()
+    try:
+        value = request.POST['choice']
+        selected_choice = question.choice_set.get(pk = value)
+    except(KeyError, Choice.DoesNotExist):
+        #last ans is correct
+        if status.selected == cans(question):
+            dec_mark(mark)
             status.selected = -1
-            status.save()
+            status.save()   
+    else: 
+        #ans is correct
+        if(selected_choice.answer == 'Yes' ):
+            #two times same correct answer
+            if selected_choice.id != status.selected:
+                add_mark(mark)
         else:
-            mark = UserProfile.objects.get(user = current_user.id)
-            #ans is corect
-            if(selected_choice.answer == 'Yes' ):
-                #two times same correct answer
-                if selected_choice.id != status.selected:
-                    add_mark(mark)
-            else:
-                if status.selected != -1:
-                    #not first time answering the question
-                    pre_choice = Choice.objects.get(pk = status.selected)
-                    if pre_choice.answer == 'Yes':
-                        #wrong ans afer corect ans
-                        dec_mark(mark)
-            #ans first time
-            status.selected = value
-            status.save()                      
-        return disp_next_question(question,pk)
-    else:
-        #get method
-        return disp_question(request,pk,current_user,question)
+            if status.selected != -1:
+                #not first time answering the question
+                pre_choice = Choice.objects.get(pk = status.selected)
+                if pre_choice.answer == 'Yes':
+                    #wrong ans afer corect ans
+                    dec_mark(mark)
+        #ans first time
+        status.selected = value
+        status.save()
+
 
 def add_mark(mark):
     mark.mark += 1
@@ -102,6 +119,14 @@ def add_mark(mark):
 def dec_mark(mark):
     mark.mark -= 1 
     mark.save()
+
+# correct ans
+def cans(question):
+    list = question.choice_set.all()
+    for x in list:
+        if x.answer == 'Yes':
+            return x.id
+
 
 def disp_question(request,pk,current_user,question):
     #get request
@@ -113,6 +138,7 @@ def disp_question(request,pk,current_user,question):
     'first_question': first_question,
     'last_question' : last_question,
     'pre_question' : pre_question,
+    'next_question': next_question,
     'status'  : status,
     'current_status' : current_status, 
    }
@@ -121,13 +147,7 @@ def disp_question(request,pk,current_user,question):
 def disp_next_question(question,pk):
     next_Question = next_question(pk)
     if(next_Question != None):
-            return HttpResponseRedirect(reverse('quiz:ans',args = (next_Question,)))
+            return HttpResponseRedirect(reverse('quiz:disp',args = (next_Question.id,)))
     else:
         return redirect('login:logout')
         #return HttpResponse("Thank You") #need to check how many left unanswerd
-
-def disp(request,pk): 
-    qlist = Question.objects.all()
-    pk = int(pk)
-    pk = pk -1
-    return HttpResponse(qlist[pk].id)

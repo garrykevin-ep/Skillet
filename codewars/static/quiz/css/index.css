@@ -1,0 +1,107 @@
+#logo{
+	width: 100%;
+	height:10%;
+	background-color: #BCE892;
+	margin-bottom: 10px;
+}
+
+#rightbo{
+	height: inherit;
+	border: solid;
+	border-width: 1px;
+	border-color: darkslateblue;
+}
+
+.panel-body h1{
+	font-size: 20px;
+	padding: 0px;
+	margin: 0;
+}
+
+.panel-body{
+	padding-top : 0px;
+}
+
+#box{
+	background-color: white;
+	border:2px solid #cbcbcb;
+	box-shadow: 0 4px 5px 2px rgba(0,0,0,.3);
+	height: 100%;
+
+}
+
+body{
+	background-color: #4;
+	}
+
+.red
+{
+	background-color: red;
+	color: black;
+	width: 80px;
+	border:transparent;
+	margin-top: 10px;
+}
+
+.yellow
+{
+	background-color: orange;
+	width: 80px;
+	border:transparent;
+	color: black;
+	margin-top: 10px;
+}
+
+.green
+{
+	background-color: #228B22;
+	width :80px;
+	border:transparent;
+	color: black;
+	margin-top: 10px;
+}
+
+.status-btn
+{
+	width: 5%;
+	height:5%;
+	border: solid black 1px;
+}
+
+.btn.nohover:hover {
+    cursor:default !important;
+}
+
+
+#status
+{
+	display: none;
+}
+
+form{
+	margin-left: 10px;
+}
+
+.panel-info{
+	margin-left: 10px;
+}
+
+#ds{
+	height: 10px;
+}
+.countdowntimer{
+	margin-left: 10px;
+	margin-bottom: 20px;
+}
+
+#end{
+	width: 80px;
+	height: 25px;
+	margin-top: 5px;
+}
+
+#end h5{
+	margin: 0px;
+	padding-bottom: 10px;
+}
+

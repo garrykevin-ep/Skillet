@@ -55,7 +55,7 @@ Question {{forloop.counter}}
 </div>
 </div>
 
-<form action="{% url 'quiz:ans' question.id %}" method="post">
+<form action="{% url 'quiz:disp' question.id %}" method="post">
     {% csrf_token %}
     {% for choice in question.choice_set.all %}
     {% if current_status.selected == choice.id %}
@@ -67,15 +67,13 @@ Question {{forloop.counter}}
     {% endfor %}
     
    <div class="nav col-lg-12">
-    {%if question.id != first_question %}
-    <a class = "btn btn-primary" href="{% url 'quiz:ans' pre_question  %}">
-    previous
-    </a>
+    {%if question.id != first_question.id %}
+    <input type= "submit"  class = "btn btn-primary" value = "Previous" name = "nav">
     {% endif %}
-    {% if question.id != last_question%}
-    <input class = "btn btn-primary" type="submit" value="next">
+    {% if question.id != last_question.id %}
+    <input type="submit" class = "btn btn-primary"  value="Next" name = "nav">
     {% else %}
-    <input class="btn btn-primary" type="submit" value="Finish">  
+    <input type="submit" name = "nav" class="btn btn-primary" value="Finish" >  
     {% endif %}
    </div>
    {# hidden inp  #}
@@ -84,19 +82,17 @@ Question {{forloop.counter}}
    <input type ="hidden" id="status" name="status" value={{x.Qstatus}}>
    {% endif %}
    {% endfor %}
-</form>
+
 
 </div>
 
 <div id="rightbox" class="col-lg-1">
 {% for x in status %}
-<a id="side" href="{% url 'quiz:nq' forloop.counter %}" class="btn  hidden-xs {{x.Qstatus}}">
-	{{forloop.counter}}
-</a>
+<input id="side" value ="{{forloop.counter}}" type ="submit" class="btn  hidden-xs {{x.Qstatus}}" name = "nav">
 {% endfor %}
 </div>
 
-
+</form>
 
 </div>
 </div>
