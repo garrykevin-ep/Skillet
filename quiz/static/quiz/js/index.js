@@ -133,11 +133,12 @@ function dob(x)
 	x.click();	
 }
 
-$(function(){
-$('#ms_timer').countdowntimer({
-minutes :20,
-seconds : 10,
-size : "lg"
-});
-});
-
+function timer () {
+	
+	var x = document.getElementById('ms_timer');
+	var min = document.getElementById('minrem');
+	var sec = document.getElementById('secrem');
+	min.value = x.textContent[0]+x.textContent[1];
+	sec.value = x.textContent[3]+x.textContent[4];
+	console.log(min.value+" " + sec.value);
+}

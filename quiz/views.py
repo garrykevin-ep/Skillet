@@ -49,13 +49,11 @@ def prev_question(pk):
     else:
         return None
 
-#go to nth question //not used //needs review
 def nth_question(pk):
     qlist = Question.objects.all()
     pk = int(pk)
     pk = pk -1
     return qlist[pk]
-    #return ans(request,qlist[pk].id)
     
 
 @login_required(login_url = '/')
@@ -82,16 +80,22 @@ def ans(request,pk):
     current_user = request.user
     question = get_object_or_404(Question,pk=pk)
     status, created = Status.objects.get_or_create(User = current_user,question = question) 
-    mark = UserProfile.objects.get(user = current_user.id)
+    user = UserProfile.objects.get(user = current_user.id)
     status.Qstatus = request.POST['status']
     status.save()
+    #saving time
+    #user could jack data sent
+    if user.rmin >= request.POST['min']:  
+        user.rmin = request.POST['min']
+        user.rsec = request.POST['sec']
+        user.save()
     try:
         value = request.POST['choice']
         selected_choice = question.choice_set.get(pk = value)
     except(KeyError, Choice.DoesNotExist):
         #last ans is correct
         if status.selected == cans(question):
-            dec_mark(mark)
+            dec_mark(user)
             status.selected = -1
             status.save()   
     else: 
@@ -99,14 +103,14 @@ def ans(request,pk):
         if(selected_choice.answer == 'Yes' ):
             #two times same correct answer
             if selected_choice.id != status.selected:
-                add_mark(mark)
+                add_mark(user)
         else:
             if status.selected != -1:
                 #not first time answering the question
                 pre_choice = Choice.objects.get(pk = status.selected)
                 if pre_choice.answer == 'Yes':
                     #wrong ans afer corect ans
-                    dec_mark(mark)
+                    dec_mark(user)
         #ans first time
         status.selected = value
         status.save()
@@ -133,6 +137,7 @@ def disp_question(request,pk,current_user,question):
     pre_question = prev_question(pk)
     current_status = Status.objects.get(User= current_user,question = question)
     status = get_list_or_404(Status,User = current_user)
+    user = UserProfile.objects.get(user = current_user.id)
     dic ={
     'question' : question,
     'first_question': first_question,
@@ -141,6 +146,7 @@ def disp_question(request,pk,current_user,question):
     'next_question': next_question,
     'status'  : status,
     'current_status' : current_status, 
+    'user' : user,
    }
     return render(request,'quiz/index.html',dic)
 
@@ -151,3 +157,15 @@ def disp_next_question(question,pk):
     else:
         return redirect('login:logout')
         #return HttpResponse("Thank You") #need to check how many left unanswerd
+
+def timer(request):
+    if request.method == 'POST':
+        current_user = request.user
+        user = UserProfile.objects.get(user = current_user.id)
+        if user.rmin >= request.POST['min']:  
+            user.rmin = request.POST['min']
+            user.rsec = request.POST['sec']
+            user.save()
+            print user.rmin
+        return HttpResponse(status=204)
+    

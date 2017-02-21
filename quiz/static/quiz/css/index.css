@@ -105,3 +105,8 @@ form{
 	padding-bottom: 10px;
 }
 
+.language-clike{
+	font-size: 15px;
+	padding: 0px;
+	margin-top : 2px;
+}

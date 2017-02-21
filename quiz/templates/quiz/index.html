@@ -1,12 +1,72 @@
 {% extends 'login/base.html' %}
 {% load static %}
+
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'quiz/css/jquery.countdownTimer.css' %}"/>
 <script type="text/javascript" src="{% static 'quiz/js/jquery.countdownTimer.min.js'  %}"></script>
 
+<link rel="stylesheet" href="{% static 'quiz/css/prism.css' %}">
+
+<script type="text/javascript" src="{% static 'quiz/js/prism.js' %}"></script>
+
 
 <link rel="stylesheet" href="{% static 'quiz/css/index.css' %}">
 <script type="text/javascript" src="{% static 'quiz/js/index.js' %}"></script>
+
+<script type="text/javascript">
+
+$(function(){
+$('#ms_timer').countdowntimer({
+minutes : {{user.rmin}},
+seconds : {{user.rsec}},
+size : "lg",
+expiryUrl : "/",
+});
+});
+
+var csrfcookie = function() {
+var cookieValue = null,
+    name = 'csrftoken';
+if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+        }
+    }
+}
+return cookieValue;
+};
+
+var params = function () {
+        timer()
+        var ps = "min=" + document.getElementById('minrem').value+"&sec="+document.getElementById('secrem').value;
+        console.log(ps);
+        return ps;
+    }
+
+
+setInterval(function(){ 
+    
+var data_file = "../../timer";
+  var http_request = new XMLHttpRequest();
+
+  http_request.open("POST", data_file, true);
+
+
+  http_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  http_request.setRequestHeader('X-CSRFToken', csrfcookie());
+
+  http_request.send(params());
+
+}, 5000);
+
+</script>
+
+
+
 {% endblock %}
 
 {%block content%}
@@ -26,6 +86,9 @@
 <div class = "countdowntimer col-lg-5">
 <span id="ms_timer"></span>
 </div>
+
+
+
 
 {% for x  in status %}
 {% if x.question.id == question.id %}
@@ -52,10 +115,18 @@ Question {{forloop.counter}}
 <div class="panel-body">
 <h1>{{question.question_text}}
 </h1>
+{% if question.code %}
+<pre>
+<code class="language-clike">
+{{question.code}}
+</code>
+</pre>
+{% endif %}
 </div>
 </div>
 
-<form action="{% url 'quiz:disp' question.id %}" method="post">
+
+<form action="{% url 'quiz:disp' question.id %}" method="post" onsubmit="timer()">
     {% csrf_token %}
     {% for choice in question.choice_set.all %}
     {% if current_status.selected == choice.id %}
@@ -83,6 +154,8 @@ Question {{forloop.counter}}
    {% endif %}
    {% endfor %}
 
+<input type ="hidden" id="minrem" name="min" value={{user.rmin}}>
+   <input type ="hidden" id="secrem" name="sec" value={{user.rsec}}>
 
 </div>
 

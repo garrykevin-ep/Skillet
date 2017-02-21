@@ -1,3 +1,5 @@
 add timer
-no option click,with prev correct ans no dec_mark and  all ohter cases
-answer using prev and sidebar
+	#add ajax
+		#get 
+			1st or last question
+			

@@ -9,6 +9,7 @@ class ChoiceInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['question_text']}),
+        ('Code', {'fields': ['code'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
     
