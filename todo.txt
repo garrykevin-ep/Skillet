@@ -1,5 +1,0 @@
-add timer
-	#add ajax
-		#get 
-			1st or last question
-			
