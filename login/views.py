@@ -70,7 +70,7 @@ def first_question():
 def logout_view(request):
     current_user  = request.user
     a = User.objects.get(id= current_user.id)
-    a.is_active = False
+    # a.is_active = False
     a.save() 
     logout(request)
     return redirect('login:login')

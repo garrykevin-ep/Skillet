@@ -3,6 +3,8 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'quiz/css/jquery.countdownTimer.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'quiz/css/theme.css' %}"/>
+
 <script type="text/javascript" src="{% static 'quiz/js/jquery.countdownTimer.min.js'  %}"></script>
 
 <link rel="stylesheet" href="{% static 'quiz/css/prism.css' %}">
@@ -71,50 +73,113 @@ var data_file = "../../timer";
 
 {%block content%}
 
-<div class="container">
         
-<div id="box" class="row">
+<div id="logo" class="navbar navbar-inverse">
+  <div class = "col-md-5 col-md-push-2" style="margin-top:10px">
+    <span class = "white" >
+    Name :
+    </span>
+    <span class = "gold" >
+    {{user.user.first_name}}
+    </span>
+  </div>
+</div>
 
-<div id="logo" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
- <div id="end" class = "col-lg-2 col-lg-push-10 btn btn-info">
-  <h5>End Test</h5>
+<div class="container">
+<form action="{% url 'quiz:disp' question.id %}" method="post" onsubmit="timer()">
+<div class="row">
+  <div class = "countdowntimer col-md-8">
+    <span id="ms_timer"></span>
+  </div>
+  {% csrf_token %}
+  <div class = "col-md-1 nav">
+    
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Unanswered</button>
+
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Unanswered Questions</h4>
+          </div>
+          <div class="modal-body">
+            {% for x in status %}
+            {% if x.Qstatus == 'red' %}
+            <input id="side" value ="{{forloop.counter}}" type ="submit" class="btn  hidden-xs {{x.Qstatus}} " name = "nav">
+            {% endif %}
+            {% endfor %}
+          </div> 
+        </div>
+      </div>
+    </div>
   </div>
 
+  <div class = "col-md-1  nav">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#flag">Flagged</button>
+
+    <div class="modal fade" id="flag" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Flagged</h4>
+        </div>
+        <div class="modal-body">
+          {% for x in status %}
+          {% if x.Qstatus == 'yellow' %}
+          <input id="side" value ="{{forloop.counter}}" type ="submit" class="btn  {{x.Qstatus}} " name = "nav">
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class = "col-md-1  nav">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#overview">Overview</button>
+
+    <div class="modal fade" id="overview" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Overview</h4>
+        </div>
+        <div class="modal-body">
+          {% for x in status %}
+          <input id="side" value ="{{forloop.counter}}" type ="submit" class="btn  {{x.Qstatus}} " name = "nav">
+          {% endfor %}
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>
+<!-- endrow timer -->
+<hr>
+
 
 <div class="row">
-<div class = "countdowntimer col-lg-5">
-<span id="ms_timer"></span>
-</div>
 
 
-
-
-{% for x  in status %}
-{% if x.question.id == question.id %}
-{# click div #}
-<div id="dstat" onclick="curStat()" class="col-lg-2 col-lg-push-5 status-btn {{x.Qstatus}}">
-</div>
-{% endif %}
-{% endfor %}
-
-<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-
-<div class="panel panel-info">
-
-<div class="panel panel-heading">
+<div class="col-md-10 card-header" style="overflow : auto;">
+<span class="tag tag-pill tag-default label-med">Q
 {% for x in status %}
 {% if x.question.id == question.id %}
-<h1 class="panel-title"> 
-Question {{forloop.counter}}
+{{forloop.counter}} 
 {% endif %}
-{% endfor %}
-</h1>
-</div>
-{# display question #}
-<div class="panel-body">
-<h1>{{question.question_text}}
-</h1>
+{% endfor %}) Weightage : 1.0</span>
+<hr style="border : 0px;">
+<h3>{{question.question_text}}
+</h3>
 {% if question.code %}
 <pre>
 <code class="language-clike">
@@ -123,19 +188,26 @@ Question {{forloop.counter}}
 </pre>
 {% endif %}
 </div>
-</div>
 
-
-<form action="{% url 'quiz:disp' question.id %}" method="post" onsubmit="timer()">
-    {% csrf_token %}
+<div class="card-body">
+<div class="row">
+<div class=col-md-10>
+<table>
+<tbody>
     {% for choice in question.choice_set.all %}
+    <tr>
+      <td>
     {% if current_status.selected == choice.id %}
     <input type="radio" onclick="hi()" name="choice" value="{{choice.id}}" checked = "checked"/>
     {% else %}
     <input type="radio" onclick="hi()" name="choice" value="{{choice.id}}" />
     {% endif %}
     <label>{{choice.choice_text}}</label> <br>
+      </td>
+    </tr>
     {% endfor %}
+  </tbody>
+</table>
     
    <div class="nav col-lg-12">
     {%if question.id != first_question.id %}
@@ -146,6 +218,20 @@ Question {{forloop.counter}}
     {% else %}
     <input type="submit" name = "nav" class="btn btn-primary" value="Finish" >  
     {% endif %}
+
+    {% for x  in status %}
+    {% if x.question.id == question.id %}
+    {# click div #}
+    <div id="dstat" onclick="curStat()" class="btn btn-primary {{x.Qstatus}}">
+      {% if x.Qstatus == 'yellow' %}
+      Unflag
+      {% else %}
+      Flag
+      {% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+ 
    </div>
    {# hidden inp  #}
    {% for x in status %}
@@ -156,18 +242,12 @@ Question {{forloop.counter}}
 
 <input type ="hidden" id="minrem" name="min" value={{user.rmin}}>
    <input type ="hidden" id="secrem" name="sec" value={{user.rsec}}>
-
+ </div>
+<div>
 </div>
-
-<div id="rightbox" class="col-lg-1">
-{% for x in status %}
-<input id="side" value ="{{forloop.counter}}" type ="submit" class="btn  hidden-xs {{x.Qstatus}}" name = "nav">
-{% endfor %}
 </div>
+</div><!-- cardbody -->
 
 </form>
-
-</div>
-</div>
 </div>
 {% endblock %}

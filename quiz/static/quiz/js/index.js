@@ -62,12 +62,14 @@ function curStat () {
 		{//marking on dobut
 			st.value = "green";
 			x.style.backgroundColor = "#228B22";
+			x.innerHTML = "Flag";
 			// side.style.backgroundColor = "#228B22";
 		}
 		else
 		{
 			st.value ="yellow";
 			x.style.backgroundColor = "orange";
+			x.innerHTML = "Unflag";
 			// side.style.backgroundColor = "orange";
 		}
 	}
@@ -78,12 +80,14 @@ function curStat () {
 		{
 			st.value = "red";
 			x.style.backgroundColor = "red";
+			x.innerHTML = "Flag";
 			// side.style.backgroundColor = "red";	
 		}
 		else
 		{
 			st.value = "yellow";
 			x.style.backgroundColor = "orange";
+			x.innerHTML = "Unflag";
 			//side.style.backgroundColor = "orange";
 		}
 

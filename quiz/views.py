@@ -31,7 +31,7 @@ def last_question():
 
 def next_question(pk):
     pk = int(pk)
-    if pk != last_question():
+    if pk != last_question().id:
         list = Question.objects.filter(id__gt = pk)
         list = list[0]
         return list
@@ -55,7 +55,7 @@ def nth_question(pk):
     pk = pk -1
     return qlist[pk]
     
-
+# post hits here
 @login_required(login_url = '/')
 def disp(request,pk):
     question = get_object_or_404(Question,pk=pk)
@@ -63,7 +63,8 @@ def disp(request,pk):
     if request.method == 'POST':
         nav = request.POST['nav']
         ans(request,pk)
-        if nav  == 'Next':
+        if nav  == 'Next' or nav == 'Finish':
+            #function is just to check last question
             return disp_next_question(question,pk)
         elif nav == 'Previous':
             prev_q = prev_question(pk)
