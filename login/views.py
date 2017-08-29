@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 #user defined
 from .models import UserProfile
+from quiz.models import Question
 from .form import RegisterForm
 
 
@@ -19,9 +21,10 @@ def auth(request):
     if User is not None:
             if User.is_active:
                 login(request,User)
-                return HttpResponseRedirect(reverse('quiz:index',args = (1,)))
+                return redirect('quiz:pop')
+                #return HttpResponseRedirect(reverse('quiz:ans',args = (first_question(),)))
     else:
-        return render(request,'login/login.html',{'error_message' : "Wrong Pass",
+        return render(request,'login/login.html',{'error_message' : "Wrong Password or You finished the test",
                                                   'x' : pasword})
 def register(request):
     if request.method == 'POST':
@@ -42,7 +45,8 @@ def register(request):
             #login and redirect to main page
             auth = authenticate(username = username ,password = password)
             login(request,auth)
-            return HttpResponseRedirect(reverse('quiz:index',args = (1,)))
+            return redirect('quiz:pop')
+            #return HttpResponseRedirect(reverse('quiz:index',args = (1,)))
         else:
             #when form data is wrong
             form = RegisterForm()
@@ -57,3 +61,16 @@ def ph_save(user,number):
     usr_pro = UserProfile.objects.get(user = user.id)
     usr_pro.ph_no = number
     usr_pro.save()
+
+def first_question():
+    list = Question.objects.all()
+    list = list[0]
+    return list.id
+
+def logout_view(request):
+    current_user  = request.user
+    a = User.objects.get(id= current_user.id)
+    # a.is_active = False
+    a.save() 
+    logout(request)
+    return redirect('login:login')

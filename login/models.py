@@ -9,9 +9,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User,related_name= 'profile',on_delete=models.CASCADE,primary_key=True)
     mark = models.IntegerField(default= 0)
     ph_no = models.IntegerField(null = True)
-
+    rmin = models.CharField(null=True,max_length=2,default=50)
+    rsec = models.CharField(null=True,max_length=2,default=10)
     def __str__(self):
-        return 'Profile of user: {}'.format(self.user.username)
+        return 'Profile of user: {} -- mark = {} '.format(self.user.username,self.mark)
 
 #To populate when a user is registered
 def create_user_profile(sender, instance, created, **kwargs):

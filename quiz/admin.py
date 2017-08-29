@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Question,Choice
+from .models import  Question,Choice#,Status
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -9,8 +9,11 @@ class ChoiceInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['question_text']}),
-        ('Code', {'fields': ['code_text'], 'classes': ['collapse']}),
+        ('Code', {'fields': ['code'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
+    
+
 
 admin.site.register(Question,QuestionAdmin)
+#admin.site.register(Question)

@@ -1,22 +1,36 @@
+{% extends 'login/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+
+{% block content%}
+<div class = "container">
 {% if error_message %}
 <strong>
 <p>{{error_message}}</p>
 </strong><br>
 {% endif %}
+	
+ 
+<div class = "login">
+ <h1>Login</h1>
 
-<form action="{% url 'login:auth' %}"   method="post">
-{% csrf_token %}
-    <label>Username</label>
-    <input type="text" name="user_name">
-    <br>
-    <label>Password</label>
-    <input type="password" name="password">
-    <br>
-    <input type="submit" name="Login" value ="login" >
-</form>
-
-<a href=" {% url 'login:register' %} ">
-<button>
-Register
-</button>
-</a>
+ 	<form action="{% url 'login:auth' %}"   method="post" >
+	
+	{% csrf_token %}	
+    
+    <input type="text"  name="user_name" placeholder="UserName" >	
+     	
+    <input type="password" name="password" placeholder ="Password" >
+    
+ 	<button type = "submit" class="btn btn-primary btn-block btn-large" name = "Login">Let me in.</button>
+    </form>
+    
+    <a class="btn btn-primary btn-block btn-large" href=" {% url 'login:register' %} ">
+	Register
+	</a>
+</div>
+{% endblock %}
+</div>
