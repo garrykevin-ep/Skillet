@@ -171,7 +171,7 @@ var data_file = "../../timer";
 
 
 <div class="col-md-10 card-header" style="overflow : auto;">
-<span class="tag tag-pill tag-default label-med">Q
+<span class="tag tag-pill tag-default label-med">
 {% for x in status %}
 {% if x.question.id == question.id %}
 {{forloop.counter}} 
@@ -186,6 +186,9 @@ var data_file = "../../timer";
 {{question.code}}
 </code>
 </pre>
+{% endif %}
+{% if question.image %}
+<img class="img-res" width="200px" height="200px" src="{{MEDIA_URl}}{{question.image.url}}">
 {% endif %}
 </div>
 

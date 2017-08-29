@@ -9,11 +9,10 @@ class ChoiceInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['question_text']}),
-        ('Code', {'fields': ['code'], 'classes': ['collapse']}),
+        ('Code and Image', {'fields': ['code','image'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
     
-
 
 admin.site.register(Question,QuestionAdmin)
 #admin.site.register(Question)
