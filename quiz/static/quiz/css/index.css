@@ -20,7 +20,10 @@
 	border:2px solid #cbcbcb;
 	box-shadow: 0 4px 5px 2px rgba(0,0,0,.3);
 	height: 100%;
+}
 
+#side{
+	margin-bottom: 10px;	
 }
 
 body{
@@ -31,7 +34,6 @@ body{
 {
 	background-color: red;
 	color: black;
-	/*width: 80px;*/
 	border:transparent;
 	
 }
@@ -39,7 +41,6 @@ body{
 .yellow
 {
 	background-color: orange;
-	/*width: 80px;*/
 	border:transparent;`
 	color: black;
 	
@@ -48,7 +49,6 @@ body{
 .green
 {
 	background-color: #228B22;
-	/*width :80px;*/
 	border:transparent;
 	color: black;
 	
