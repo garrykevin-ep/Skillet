@@ -2,7 +2,7 @@ var allRadios = document.getElementsByName('choice');
 
 function hi () {
 var booRadio;
-var st = document.getElementById('status');        	
+var st = document.getElementById('status');
 var x = 0;
 for(x = 0; x < allRadios.length; x++){
 	allRadios[x].onclick = function(){
@@ -113,7 +113,7 @@ function init() {
 	var st = document.getElementById('status');
 	var x = sel();
 	var y = document.getElementById('dstat');
-	//console.log("init");
+
 	if(x != false)
 	{
 	dob(x);
@@ -124,6 +124,7 @@ function init() {
 		//no option exsit
 		console.log("no option exsit");
 		var x = allRadios[0];
+		console.log()
 		dob(x);
 		x.click();
 		
@@ -144,5 +145,5 @@ function timer () {
 	var sec = document.getElementById('secrem');
 	min.value = x.textContent[0]+x.textContent[1];
 	sec.value = x.textContent[3]+x.textContent[4];
-	console.log(min.value+" " + sec.value);
+	// console.log(min.value+" " + sec.value);
 }

@@ -45,7 +45,7 @@ return cookieValue;
 var params = function () {
         timer()
         var ps = "min=" + document.getElementById('minrem').value+"&sec="+document.getElementById('secrem').value;
-        console.log(ps);
+        //console.log(ps);
         return ps;
     }
 
@@ -195,23 +195,34 @@ var data_file = "../../timer";
 <div class="card-body">
 <div class="row">
 <div class=col-md-10>
+
+{% if question.type == 'mcq' %}  
 <table>
 <tbody>
-    {% for choice in question.choice_set.all %}
+    {% for x in choice %}
     <tr>
-      <td>
-    {% if current_status.selected == choice.id %}
-    <input type="radio" onclick="hi()" name="choice" value="{{choice.id}}" checked = "checked"/>
+    <td>
+    {% if current_status.selected == x.id %}
+    <input type="radio" onclick="hi()" name="choice" value="{{x.id}}" checked = "checked"/>
     {% else %}
-    <input type="radio" onclick="hi()" name="choice" value="{{choice.id}}" />
+    <input id="sad" type="radio" onclick="hi()" name="choice" value="{{x.id}}" />
     {% endif %}
-    <label>{{choice.choice_text}}</label> <br>
+    <label>{{x.choice_text}}</label> <br>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-    
+{% else %}
+<table>
+<tr>
+<td>
+<input class="form-control" type="text" name="answer" value="{{current_status.answer}}">
+</td>
+</tr>
+</table>
+{% endif %}
+      
    <div class="nav col-lg-12">
     {%if question.id != first_question.id %}
     <input type= "submit"  class = "btn btn-primary" value = "Previous" name = "nav">
