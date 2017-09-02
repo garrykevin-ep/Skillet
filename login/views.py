@@ -1,14 +1,14 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate,login,logout
-from django.http import HttpResponseRedirect,HttpResponse
-from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.urls import reverse
+
+from quiz.models import Question
+
+from .form import RegisterForm
 #user defined
 from .models import UserProfile
-from quiz.models import Question
-from .form import RegisterForm
-
 
 
 def auth_login(request):

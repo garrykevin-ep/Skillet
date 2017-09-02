@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Question(models.Model):
@@ -25,8 +25,11 @@ class MultiChoiceManager(models.Manager):
 #proxy multi choice Question
 class MultiQuestion(Question):
 	objects = MultiChoiceManager()
+
 	class Meta:
-		proxy = True
+		verbose_name = 'Multiple Choice Questions'
+		verbose_name_plural = 'Multiple Choice Questions'
+		proxy = True    
 
 #choice for multi
 class MultiChoice(models.Model):
@@ -65,6 +68,8 @@ class FillManager(models.Manager):
 class FillQuestion(Question):
 	objects = FillManager()
 	class Meta:
+		verbose_name = "Fill Up"
+		verbose_name_plural = "Fill Ups"	
 		proxy = True
 
 #substrings for fill ups

@@ -1,27 +1,20 @@
-from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect,Http404
-from  django.urls import reverse
-from django.shortcuts import get_object_or_404,render,get_list_or_404,redirect
-from .models import *
-from login.models import UserProfile
+from difflib import SequenceMatcher
+
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from difflib import SequenceMatcher
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
+                              render)
+from django.urls import reverse
+
+from login.models import UserProfile
+
+from .models import *
 
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
-@login_required(login_url = '/')
-def s_pop(request):
-    current_user = request.user
-    qlist = Question.objects.all()
-    for x in qlist:
-        if x.type == 'mcq':
-           MultiStatus.objects.get_or_create(User = current_user,question = x)
-        elif x.type == 'fill':
-           FillStatus.objects.get_or_create(User=current_user,question= x)
-    return HttpResponseRedirect(reverse('quiz:disp',args = (first_question().id,)))
-
+# navigation helper functions
 def no_of_Question():
     return len(Question.objects.all())
 
@@ -61,8 +54,71 @@ def nth_question(pk):
     pk = int(pk)
     pk = pk -1
     return qlist[pk]
+
+#question helper functions
+def add_mark(mark):
+    mark.mark += 1
+    mark.save()
+
+def dec_mark(mark):
+    mark.mark -= 1 
+    mark.save()
+
+def save_time(request,user):
+    #user is userprofile object
+    if user.rmin >= request.POST['min']:  
+        user.rmin = request.POST['min']
+        user.rsec = request.POST['sec']
+        user.save()
+
+# get correct ans
+def get_ans_multi(question):
+    list = MultiChoice.objects.filter(question=question)
+    for x in list:
+        if x.answer == 'Yes':
+            return x.id
+
+def get_current_status(question,current_user):
+    if question.type == 'mcq':
+        return MultiStatus.objects.get(User= current_user,question = question)
+    elif question.type == 'fill':
+        return FillStatus.objects.get(User= current_user,question = question)
+
+def get_choices(question):
+    if question.type == 'mcq':
+        return MultiChoice.objects.filter(question=question)
+    elif question.type == 'fill':
+        return FillChoice.objects.filter(question=question)
+
+def get_all_status(current_user):
+    mcq_list = MultiStatus.objects.filter(User=current_user)
+    fill_list  = FillStatus.objects.filter(User=current_user)
+    full = list(mcq_list)+list(fill_list)
+    full =  sorted(full,key=lambda x: x.question.id)
+    return full
+
+def is_fill_correct(question,currentAnswer):
+    #checks similar if matches > .5 correct
+    options = get_choices(question)
+    for x in options:
+        if similar(currentAnswer,x.choice_text) > .5:
+            return  True
+    return False
+
     
-# post hits here
+# main functions , post hits here
+@login_required(login_url = '/')
+def s_pop(request):
+    current_user = request.user
+    qlist = Question.objects.all()
+    for x in qlist:
+        if x.type == 'mcq':
+           MultiStatus.objects.get_or_create(User = current_user,question = x)
+        elif x.type == 'fill':
+           FillStatus.objects.get_or_create(User=current_user,question= x)
+    return HttpResponseRedirect(reverse('quiz:disp',args = (first_question().id,)))
+
+
 @login_required(login_url = '/')
 def disp(request,pk):
     question = get_object_or_404(Question,pk=pk)
@@ -87,17 +143,17 @@ def disp(request,pk):
 def ans(request,pk):
     current_user = request.user
     question = get_object_or_404(Question,pk=pk)
-    status = getCurrentStatus(question,current_user)
+    status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id)
     status.Qstatus = request.POST['status']
     status.save()
-    saveTime(request,user)
+    save_time(request,user)
     if question.type == 'mcq':
-        answerMulti(request,question,user,status)
+        answer_multi(request,question,user,status)
     elif question.type == 'fill':
-        answerFill(request,user,question,status)
+        answer_fill(request,user,question,status)
 
-def answerFill(request,user,question,status):
+def answer_fill(request,user,question,status):
     currentAnswer = request.POST['answer']
     # fill is blank
     if currentAnswer == '':
@@ -108,7 +164,7 @@ def answerFill(request,user,question,status):
             status.save()
     else:
         # fill not blank,ans is correct
-        if isFillCorrect(question,currentAnswer):
+        if is_fill_correct(question,currentAnswer):
             #two times correct answer
             if status.preResult != 1:
                 add_mark(user)
@@ -124,22 +180,14 @@ def answerFill(request,user,question,status):
     status.answer = currentAnswer
     status.save()
 
-def isFillCorrect(question,currentAnswer):
-    #checks similar if matches > .5 correct
-    options = getChoices(question)
-    for x in options:
-        if similar(currentAnswer,x.choice_text) > .5:
-            return  True
-    return False
 
-
-def answerMulti(request,question,user,status):
+def answer_multi(request,question,user,status):
     try:
         value = request.POST['choice']
         selected_choice = MultiChoice.objects.get(pk=value)
     except:
         # last ans is correct , no choice selected now
-        if status.selected == getAnsMulti(question):
+        if status.selected == get_ans_multi(question):
             dec_mark(user)
             status.selected = -1
             status.save()   
@@ -161,49 +209,16 @@ def answerMulti(request,question,user,status):
         status.save()
 
 
-def add_mark(mark):
-    mark.mark += 1
-    mark.save()
-
-def dec_mark(mark):
-    mark.mark -= 1 
-    mark.save()
-
-# correct ans
-def getAnsMulti(question):
-    list = MultiChoice.objects.filter(question=question)
-    for x in list:
-        if x.answer == 'Yes':
-            return x.id
-
-def getCurrentStatus(question,current_user):
-    if question.type == 'mcq':
-        return MultiStatus.objects.get(User= current_user,question = question)
-    elif question.type == 'fill':
-        return FillStatus.objects.get(User= current_user,question = question)
-
-def getChoices(question):
-    if question.type == 'mcq':
-        return MultiChoice.objects.filter(question=question)
-    elif question.type == 'fill':
-        return FillChoice.objects.filter(question=question)
-
-def getAllStatus(current_user):
-    mcq_list = MultiStatus.objects.filter(User=current_user)
-    fill_list  = FillStatus.objects.filter(User=current_user)
-    full = list(mcq_list)+list(fill_list)
-    full =  sorted(full,key=lambda x: x.question.id)
-    return full
 
 def disp_question(request,pk,current_user,question):
     if question.type == 'mcq' or question.type == 'fill':
-        return multiFillDisplay(request,pk,current_user,question)
+        return multi_fill_display(request,pk,current_user,question)
 
-def multiFillDisplay(request,pk,current_user,question):
+def multi_fill_display(request,pk,current_user,question):
     #get request
     #can display multi choice or fillups
     pre_question = prev_question(pk)
-    current_status = getCurrentStatus(question,current_user)
+    current_status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id)
     dic ={
     'question' : question,
@@ -212,8 +227,8 @@ def multiFillDisplay(request,pk,current_user,question):
     'pre_question' : pre_question,
     'next_question': next_question,
     #status for displaying status of other questions
-    'status'  : getAllStatus(current_user),
-    'choice' : getChoices(question),
+    'status'  : get_all_status(current_user),
+    'choice' : get_choices(question),
     'current_status' : current_status, 
     'user' : user,
    }
@@ -231,13 +246,5 @@ def timer(request):
     if request.method == 'POST':
         current_user = request.user
         user = UserProfile.objects.get(user = current_user.id)
-        saveTime(user)
+        save_time(user)
         return HttpResponse(status=204)
-        
-
-def saveTime(request,user):
-    #user is userprofile object
-    if user.rmin >= request.POST['min']:  
-        user.rmin = request.POST['min']
-        user.rsec = request.POST['sec']
-        user.save()

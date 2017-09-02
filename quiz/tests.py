@@ -1,9 +1,10 @@
 from django.test import TestCase
 
-# Create your tests here.
-
 from .models import *
 from .views import *
+
+# Create your tests here.
+
 
 def create_user():
 	return User.objects.create(username="dummy",password="qwerty123")
