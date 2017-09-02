@@ -6,8 +6,10 @@ Current features
 Features of each quiz:
 * Storing of quiz results under each user
 * Multiple choice question type
+* Fill question type
 * Display an code snippets alongside the question
-* live leaderboard
+* Display a image snippets alongside the question
+* Live Leaderboard
 
 Requirements
 ------------
