@@ -1,101 +1,100 @@
 var allRadios = document.getElementsByName('choice');
+var hiddenStatus = document.getElementById('hiddenstatus');
+var statusBtn = document.getElementById('statusbtn');
 
-function hi () {
+function radioClick() {
 var booRadio;
-var st = document.getElementById('status');
+console.log("radio clicked")
 var x = 0;
 for(x = 0; x < allRadios.length; x++){
 	allRadios[x].onclick = function(){
 	if(booRadio == this){
         this.checked = false;
-        booRadio = null;
+         booRadio = null;
         //if not y green->red
-        tgR();
+        	toogleGreenToRed();
         }
     else{
+    	//new option selcted
         booRadio = this;
         //if not y red->green
-        tgG();
+        toogleRedToGreen();
         } 
      };
 }
 }
 
-function tgR()
+function toogleGreenToRed()
 {
-	var side = document.getElementById('side');
-	var st = document.getElementById('status');
-	var x = document.getElementById('dstat');
-	if(st.value != "yellow")
+	
+	var hiddenStatus = document.getElementById('hiddenstatus');
+	var statusBtn = document.getElementById('statusbtn');
+	if(hiddenStatus.value != "yellow")
 	{
-		st.value = "red";
-		x.style.backgroundColor = "red";
-		// side.style.backgroundColor = "red";
-		console.log(st.value + " hidden")
+		hiddenStatus.value = "red";
+		statusBtn.style.backgroundColor = "red";
+		console.log(hiddenStatus.value + " hidden")
 	}
 }
 
-function tgG()
+function toogleRedToGreen()
 {
-	 var side = document.getElementById('side');
-	var st = document.getElementById('status');
-	console.log(st.value);
-	var x = document.getElementById('dstat');
-	if(st.value != 'yellow')
+
+	var hiddenStatus = document.getElementById('hiddenstatus');
+	var statusBtn = document.getElementById('statusbtn');
+
+	
+	if(hiddenStatus.value != 'yellow')
 	{
-		st.value = "green";
-		x.style.backgroundColor = "#228B22";
-		// side.style.backgroundColor = "#228B22";
-		console.log(st.value + " hidden")
+		hiddenStatus.value = "green";
+		statusBtn.style.backgroundColor = "#228B22";
+		console.log(hiddenStatus.value + " hidden")
 	}
 }
 
-
-function curStat () {
-	var st = document.getElementById('status');
-	var x = document.getElementById('dstat');
-	var side = document.getElementById('side');
-	if(sel() != false)
+//click on  stat btn
+function changeStatus() {
+	
+	var hiddenStatus = document.getElementById('hiddenstatus');
+	var statusBtn = document.getElementById('statusbtn');
+	if(selectedRadio() != false)
 	{
 	//choice exist
-	if(st.value == "yellow")
-		{//marking on dobut
-			st.value = "green";
-			x.style.backgroundColor = "#228B22";
-			x.innerHTML = "Flag";
-			// side.style.backgroundColor = "#228B22";
+	if(hiddenStatus.value == "yellow")
+		{
+			//marking on dobut
+			hiddenStatus.value = "green";
+			statusBtn.style.backgroundColor = "#228B22";
+			statusBtn.innerHTML = "Flag";
 		}
 		else
 		{
-			st.value ="yellow";
-			x.style.backgroundColor = "orange";
-			x.innerHTML = "Unflag";
-			// side.style.backgroundColor = "orange";
+			hiddenStatus.value ="yellow";
+			statusBtn.style.backgroundColor = "orange";
+			statusBtn.innerHTML = "Unflag";
 		}
 	}
 	else
 	{
 		//no choice exist
-		if(st.value == "yellow")
+		if(hiddenStatus.value == "yellow")
 		{
-			st.value = "red";
-			x.style.backgroundColor = "red";
-			x.innerHTML = "Flag";
-			// side.style.backgroundColor = "red";	
+			hiddenStatus.value = "red";
+			statusBtn.style.backgroundColor = "red";
+			statusBtn.innerHTML = "Flag";
 		}
 		else
 		{
-			st.value = "yellow";
-			x.style.backgroundColor = "orange";
-			x.innerHTML = "Unflag";
-			//side.style.backgroundColor = "orange";
+			hiddenStatus.value = "yellow";
+			statusBtn.style.backgroundColor = "orange";
+			statusBtn.innerHTML = "Unflag";
 		}
 
 	}
-	console.log(st.value + " hidden")
+	console.log(hiddenStatus.value + " hidden")
 }
 
-function sel()
+function selectedRadio()
 {
 	var allRadios = document.getElementsByName('choice');
 
@@ -110,32 +109,33 @@ function sel()
 
 //to avoid triple click to deselect
 function init() {
-	var st = document.getElementById('status');
-	var x = sel();
-	var y = document.getElementById('dstat');
+var hiddenStatus = document.getElementById('hiddenstatus');
 
-	if(x != false)
+	var selectedRadioBtn = selectedRadio();
+
+	if(selectedRadioBtn != false)
 	{
-	dob(x);
-	dob(x);
+	doubleClick(selectedRadioBtn);
+	doubleClick(selectedRadioBtn);
 	}
 	else
 	{
 		//no option exsit
-		console.log("no option exsit");
-		var x = allRadios[0];
-		console.log()
-		dob(x);
-		x.click();
+		console.log("no option exist");
+		var selectedRadioBtn = allRadios[0];
+		//click 3 times
+		doubleClick(selectedRadioBtn);
+		selectedRadioBtn.click();
 		
 	}
-	console.log(st.value + "hidden")
+	console.log(hiddenStatus.value + " hidden in init ")
 }
 
-function dob(x)
+//helper funtion
+function doubleClick(x)
 {
 	x.click();
-	x.click();	
+	x.click();
 }
 
 function timer () {
@@ -146,4 +146,17 @@ function timer () {
 	min.value = x.textContent[0]+x.textContent[1];
 	sec.value = x.textContent[3]+x.textContent[4];
 	// console.log(min.value+" " + sec.value);
+}
+
+function checkInputStatus()
+{
+	inputBox = $('#inputbox')[0]
+	if(inputBox.value == '')
+	{
+		toogleGreenToRed();
+	}
+	else
+	{
+		toogleRedToGreen();
+	}
 }

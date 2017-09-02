@@ -26,14 +26,11 @@
 	margin-bottom: 10px;	
 }
 
-body{
-	background-color: #4;
-	}
 
 .red
 {
 	background-color: red;
-	color: black;
+	color: #ffffff;
 	border:transparent;
 	
 }
@@ -42,7 +39,7 @@ body{
 {
 	background-color: orange;
 	border:transparent;`
-	color: black;
+	color: #ffffff;
 	
 }
 
@@ -50,7 +47,7 @@ body{
 {
 	background-color: #228B22;
 	border:transparent;
-	color: black;
+	color: #ffffff;
 	
 }
 

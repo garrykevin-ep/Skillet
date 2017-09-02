@@ -158,10 +158,10 @@ def answer_fill(request,user,question,status):
     # fill is blank
     if currentAnswer == '':
         #last ans is correct
-        if status.preResult != -1:
+        if status.preResult != -1:  
             dec_mark(user)
-            status.preResult = -1
-            status.save()
+        status.preResult = -1
+        status.save()
     else:
         # fill not blank,ans is correct
         if is_fill_correct(question,currentAnswer):
@@ -189,8 +189,8 @@ def answer_multi(request,question,user,status):
         # last ans is correct , no choice selected now
         if status.selected == get_ans_multi(question):
             dec_mark(user)
-            status.selected = -1
-            status.save()   
+        status.selected = -1
+        status.save()   
     else: 
         #ans is correct , choice is selected
         if(selected_choice.answer == 'Yes' ):

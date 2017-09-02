@@ -1,4 +1,4 @@
-{% extends 'login/base.html' %}
+{% extends 'quiz/base.html' %}
 {% load static %}
 
 {% block head %}
@@ -73,7 +73,12 @@ var data_file = "../../timer";
 
 {%block content%}
 
-        
+{% if question.type == 'mcq' %}
+<body onload="init()">        
+{% elif question.type == 'fill' %}
+<booy>
+{% endif %}
+
 <div id="logo" class="navbar navbar-inverse">
   <div class = "col-md-5 col-md-push-2" style="margin-top:10px">
     <span class = "white" >
@@ -203,9 +208,9 @@ var data_file = "../../timer";
     <tr>
     <td>
     {% if current_status.selected == x.id %}
-    <input type="radio" onclick="hi()" name="choice" value="{{x.id}}" checked = "checked"/>
+    <input type="radio" onclick="radioClick()" name="choice" value="{{x.id}}" checked = "checked"/>
     {% else %}
-    <input id="sad" type="radio" onclick="hi()" name="choice" value="{{x.id}}" />
+    <input  type="radio" onclick="radioClick()" name="choice" value="{{x.id}}" />
     {% endif %}
     <label>{{x.choice_text}}</label> <br>
       </td>
@@ -213,13 +218,14 @@ var data_file = "../../timer";
     {% endfor %}
   </tbody>
 </table>
-{% else %}
+{% elif question.type == 'fill' %}
 <table>
-<tr>
-<td>
-<input class="form-control" type="text" name="answer" value="{{current_status.answer}}">
-</td>
-</tr>
+  <tr>
+    <td>
+      <h4>Enter the answer :</h4>
+      <input style = " width : 500px;" id="inputbox" onfocusout="checkInputStatus()" class="form-control" type="text" name="answer" value="{{current_status.answer}}">
+    </td>
+  </tr>
 </table>
 {% endif %}
       
@@ -233,10 +239,15 @@ var data_file = "../../timer";
     <input type="submit" name = "nav" class="btn btn-primary" value="Finish" >  
     {% endif %}
 
+
     {% for x  in status %}
     {% if x.question.id == question.id %}
-    {# click div #}
-    <div id="dstat" onclick="curStat()" class="btn btn-primary {{x.Qstatus}}">
+    {# status btn #}
+    {% if question.type == 'mcq' %}
+    <div id="statusbtn" onclick="changeStatus()" class="btn btn-primary {{x.Qstatus}}"  style="background-color : {{x.Qstatus}} " >
+    {% elif question.type == 'fill'%}
+    <div id="statusbtn" onclick="changeStatus()" class="btn btn-primary {{x.Qstatus}}" style="background-color : {{x.Qstatus}} ">
+    {% endif %}
       {% if x.Qstatus == 'yellow' %}
       Unflag
       {% else %}
@@ -245,23 +256,24 @@ var data_file = "../../timer";
     </div>
     {% endif %}
     {% endfor %}
- 
+
    </div>
    {# hidden inp  #}
    {% for x in status %}
    {% if x.question.id == question.id %}
-   <input type ="hidden" id="status" name="status" value={{x.Qstatus}}>
+   <input type ="hidden" id="hiddenstatus" name="status" value={{x.Qstatus}}>
    {% endif %}
    {% endfor %}
+
+
 
 <input type ="hidden" id="minrem" name="min" value={{user.rmin}}>
    <input type ="hidden" id="secrem" name="sec" value={{user.rsec}}>
  </div>
-<div>
-</div>
 </div>
 </div><!-- cardbody -->
 
 </form>
 </div>
+</body>
 {% endblock %}
