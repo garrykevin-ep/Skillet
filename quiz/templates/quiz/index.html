@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{% static 'quiz/css/jquery.countdownTimer.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'quiz/css/theme.css' %}"/>
 
 <script type="text/javascript" src="{% static 'quiz/js/jquery.countdownTimer.min.js'  %}"></script>
@@ -94,7 +93,7 @@ var data_file = "../../timer";
 <form action="{% url 'quiz:disp' question.id %}" method="post" onsubmit="timer()">
 <div class="row">
   <div class = "countdowntimer col-md-8">
-    <span id="ms_timer"></span>
+    <span style="font-size : 35px;color: currentColor;" id="ms_timer"></span>
   </div>
   {% csrf_token %}
   <div class = "col-md-1 nav">
