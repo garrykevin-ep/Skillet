@@ -1,0 +1,318 @@
+{% extends "coding/base.html" %}
+{% load static %}
+
+{% block head %}
+	
+	{# timer #}
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="{% static 'quiz/js/jquery.countdownTimer.min.js'  %}"></script>
+	{# end timer #}
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/clear.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/roundbox.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/problem-statement.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/table-form.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/ttypography.css' %}">
+
+<script type="text/javascript">
+
+function timer () {
+	
+	var x = document.getElementById('ms_timer');
+	var min = document.getElementById('minrem');
+	var sec = document.getElementById('secrem');
+	min.value = x.textContent[0]+x.textContent[1];
+	sec.value = x.textContent[3]+x.textContent[4];
+	console.log(min.value+" " + sec.value);
+}
+
+
+$(function(){
+$('#ms_timer').countdowntimer({
+minutes : {{user.rmin}},
+seconds : {{user.rsec}},
+size : "lg",
+expiryUrl : "/",
+});
+});
+
+$("#form").submit(function(e) {
+    e.preventDefault();
+});
+
+
+var csrfcookie = function() {
+var cookieValue = null,
+    name = 'csrftoken';
+if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+        }
+    }
+}
+return cookieValue;
+};
+
+var params = function () {
+        timer()
+        var ps = "min=" + document.getElementById('minrem').value+"&sec="+document.getElementById('secrem').value;
+        //console.log(ps);
+        return ps;
+    }
+
+
+setInterval(function(){ 
+    
+var data_file = "../../timer";
+  var http_request = new XMLHttpRequest();
+
+  http_request.open("POST", data_file, true);
+
+
+  http_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  http_request.setRequestHeader('X-CSRFToken', csrfcookie());
+
+  http_request.send(params());
+
+}, 5000);
+
+</script>
+
+
+
+{% endblock head %}
+
+{% block content %}
+<body>
+<div id="body">
+
+
+
+	<div style="position : relative;">
+			<!-- side bar start -->
+		<div id="sidebar">
+	<form id="form" class="submitForm" enctype="multipart/form-data" action="{% url 'quiz:disp' question.id %}" method="post" onsubmit="timer()">
+	{% csrf_token %}
+			<div class="roundbox sidebox">
+			<div class="roundbox-lt">&nbsp;</div>
+			<div class="roundbox-rt">&nbsp;</div>
+			<div class="caption titled">
+			→ Timer
+   			 </div>
+   			 <div>	
+       			 <div class="countdowntimer col-md-8">
+       			 <span style="font-size : 35px;color: black; margin-left = 10px;margin-left: 2em;" id="ms_timer" ></span>
+  	</div>
+			</div> 
+		</div>
+
+			{% if current_status.question_status == 'Not Accepted'%}				
+			<!-- 1st side box start -->
+			<div class="roundbox sidebox">
+			<div class="roundbox-lt">&nbsp;</div>
+			<div class="roundbox-rt">&nbsp;</div>
+			<div class="caption titled">
+			→ Submit?
+   			 </div>
+   			 <div>	
+       			<table class="table-form" style="width:90%;">
+			    <tbody>
+			        <tr>
+			            <td class="field">Choose file:</td>
+			            <td>
+			                <input name="userAnswer"  type="file">
+			            </td>
+			        </tr>
+			        <tr>
+			            <td colspan="2">
+			                <div style="text-align: center;">
+			                    <div style="position: relative; display: inline-block;">
+			                            <input style="width:10em;" class="submit" name="nav" value="submit" type="submit">
+			                    </div>
+			                </div>
+			            </td>
+			        </tr>
+			    </tbody>
+				</table>
+			</div> 
+		</div>
+			<!-- 1st side box end -->
+		{% else %}
+		<!-- 1st side box end -->
+		<div class="roundbox sidebox">
+			<div class="roundbox-lt">&nbsp;</div>
+			<div class="roundbox-rt">&nbsp;</div>
+			<div class="caption titled">
+			→ Result
+   			 </div>
+   			 <div style="margin-left: 6em;">	
+       			Accepted
+			</div> 
+		</div>
+<!-- 1st side box end -->
+{% endif %}
+
+
+		<!-- 2nd side box start -->
+			<div class="roundbox sidebox">
+			<div class="roundbox-lt">&nbsp;</div>
+			<div class="roundbox-rt">&nbsp;</div>
+			<div class="caption titled">
+			→ Navigation
+   			 </div>
+   			 <div>	
+       			 <table class="table-form" style="width:90%;">
+			    <tbody>
+			        <tr>
+			            {% if is_not_first_question %}
+			            <td class="field">
+			            <input style="width:10em;" class="submit" name="nav" value="Previous" type="submit"></td>
+			            {% endif %}
+			            <td>
+							{% if last_question %}
+			               <input id="finish" style="width:10em;" class="submit" name="nav" value="Finish" type="submit">
+							{% else %}
+			               <input style="width:10em;" class="submit" name="nav" value="Next" type="submit">
+			            	{% endif %}
+			            </td>
+			        </tr>
+			    </tbody>
+				</table>
+				<input id="minrem" name="min" value="{{user.rmin}}" type="hidden">
+				<input id="secrem" name="sec" value="{user.rsec}}" type="hidden">
+				</form>
+			</div> 
+		</div>
+			<!-- 12ndside box end -->
+
+
+		</div>
+			<!--  side bar end -->
+
+<!-- leftbox start -->
+<div id="pageContent" class="content-with-sidebar">
+	<div class="problemindexholder">
+		<div class="problem-statement">
+		<div class="ttypography">
+			<div class="header">
+				<div class="title">{{question.question_text}}</div>
+			</div>
+			<div>
+				{% autoescape off %}
+				{{code.problem_statement}}
+				{% endautoescape %}
+			</div>
+<div class="input-specification">
+<div class="section-title">Input</div>
+	{{ code.input_statement |safe }}
+</div>
+
+<div class="output-specification">
+<div class="section-title">Output</div>
+{{ code.output_statement | safe }}
+</div>
+
+<!-- constraint start -->
+<div class="note">
+<div class="section-title">Constraint</div>
+{{ code.constraint | safe }}
+</div>
+<!-- constraint end -->
+
+
+
+<div class="sample-tests">
+<div class="section-title">Examples</div>
+<div class="sample-test">
+
+{% for x in testcase %}
+		
+	<div class="input">
+		<div class="title">Input</div>
+			<pre>{{ x.input }}</pre>
+	</div>
+	<div class="output">
+		<div class="title">Output</div>
+			<pre>{{ x.output }}</pre>
+	</div>
+
+{% endfor %}	
+
+</div>
+<!-- sample-test end -->
+</div>
+<!-- sample-tests end -->
+
+<!-- Explanation start -->
+<div class="note">
+<div class="section-title">Explanation</div>
+{{ code.explanation | safe }}
+</div>
+<!-- Explanation end -->
+
+
+{% if message %}
+	
+<div class="sample-tests">
+<div class="section-title">Result</div>
+		<div class="sample-test">
+		<div class="input">
+			{# <div class="title">Result</div> #}
+			<pre>{{ message }}</pre>
+		</div>
+		</div>
+<div>
+
+{% endif %}
+
+
+{% if message == 'wrong answer' %}
+<br>
+<div class="sample-tests">
+<div class="section-title">Failed on testcase {{testcase_failed}} </div>
+<div class="sample-test">
+
+	<div class="input">
+		{# <div class="title">&nbsp;</div> #}
+			<pre>{% for x in wrong_testcase %}{{x}}{% endfor %}</pre>
+	</div>
+
+</div>
+<!-- failed-test end -->
+</div>
+
+<div class="section-title">&nbsp;</div>
+<div class="sample-test">
+<div class="input">
+		<div class="title">Your Output</div>
+			<pre>{% for x in user_output %}{{x}}{% endfor %}</pre>
+	</div>
+
+	<div class="output">
+		<div class="title">Expected Output</div>
+			<pre>{% for x in expected_output %}{{x}}{% endfor %}</pre>
+	</div>
+</div>
+
+</div>
+</div>
+{% endif %}
+{# wrong answer end #}
+		<!-- ttypography end-->
+	</div>
+		<!-- problem-statement end -->
+	
+	</div>	
+	<!-- problem holder end -->
+</div>
+	<!-- leftbox end-->
+	</div>
+</div>
+<!-- id body end -->
+</body>
+{% endblock content %}

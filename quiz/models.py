@@ -5,11 +5,12 @@ from django.db import models
 class Question(models.Model):
 	question_text = models.CharField(null = False,max_length= 200)
 	code = models.TextField(blank=True)
-	image = models.ImageField(blank=True)
+	image = models.ImageField(blank=True,upload_to='images')
 	mark = models.IntegerField(default=1,blank=False)
 	Question_Type = (
 		('mcq','mcq'),
 		('fill','fill'),
+		('code','code')
 		)
 	type = models.CharField(max_length=3,choices=Question_Type,default='mcq')
 	

@@ -9,6 +9,9 @@ from django.urls import reverse
 
 from login.models import UserProfile
 
+from coding.views import answer_coding,coding_display
+from coding.models import CodeUserStatus
+
 from .models import *
 
 def similar(a, b):
@@ -116,6 +119,8 @@ def s_pop(request):
            MultiStatus.objects.get_or_create(User = current_user,question = x)
         elif x.type == 'fill':
            FillStatus.objects.get_or_create(User=current_user,question= x)
+        elif x.type == 'code':
+            CodeUserStatus.objects.get_or_create(User=current_user,question= x)
     return HttpResponseRedirect(reverse('quiz:disp',args = (first_question().id,)))
 
 
@@ -126,7 +131,9 @@ def disp(request,pk):
     if request.method == 'POST':
         nav = request.POST['nav']
         ans(request,pk)
-        if nav  == 'Next' or nav == 'Finish':
+        if nav == 'submit':
+            return answer_coding(request,pk,question)
+        elif nav  == 'Next' or nav == 'Finish':
             #function is just to check last question
             return disp_next_question(question,pk)
         elif nav == 'Previous':
@@ -145,8 +152,8 @@ def ans(request,pk):
     question = get_object_or_404(Question,pk=pk)
     status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id)
-    status.Qstatus = request.POST['status']
-    status.save()
+    #status.Qstatus = request.POST['status']
+    #status.save()
     save_time(request,user)
     if question.type == 'mcq':
         answer_multi(request,question,user,status)
@@ -213,6 +220,9 @@ def answer_multi(request,question,user,status):
 def disp_question(request,pk,current_user,question):
     if question.type == 'mcq' or question.type == 'fill':
         return multi_fill_display(request,pk,current_user,question)
+    elif question.type == 'code':
+        dic = {}
+        return coding_display(request,pk,question,None)
 
 def multi_fill_display(request,pk,current_user,question):
     #get request
