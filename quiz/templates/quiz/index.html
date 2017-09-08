@@ -204,8 +204,8 @@ var data_file = "../../timer";
 <table>
 <tbody>
     {% for x in choice %}
-    <tr>
-    <td>
+    <tr >
+    <td >
     {% if current_status.selected == x.id %}
     <input type="radio" onclick="radioClick()" name="choice" value="{{x.id}}" checked = "checked"/>
     {% else %}
@@ -243,7 +243,7 @@ var data_file = "../../timer";
     {% if x.question.id == question.id %}
     {# status btn #}
     {% if question.type == 'mcq' %}
-    <div id="statusbtn" onclick="changeStatus()" class="btn btn-primary {{x.Qstatus}}"  style="background-color : {{x.Qstatus}} " >
+    <div id="statusbtn" onclick="changeStatus()" class="btn btn-primary {{x.Qstatus}}"   >
     {% elif question.type == 'fill'%}
     <div id="statusbtn" onclick="changeStatus()" class="btn btn-primary {{x.Qstatus}}" style="background-color : {{x.Qstatus}} ">
     {% endif %}

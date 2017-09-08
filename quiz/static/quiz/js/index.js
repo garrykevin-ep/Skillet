@@ -4,11 +4,11 @@ var statusBtn = document.getElementById('statusbtn');
 
 function radioClick() {
 var booRadio;
-console.log("radio clicked")
 var x = 0;
 for(x = 0; x < allRadios.length; x++){
 	allRadios[x].onclick = function(){
 	if(booRadio == this){
+        
         this.checked = false;
          booRadio = null;
         //if not y green->red
@@ -125,7 +125,7 @@ var hiddenStatus = document.getElementById('hiddenstatus');
 		var selectedRadioBtn = allRadios[0];
 		//click 3 times
 		doubleClick(selectedRadioBtn);
-		selectedRadioBtn.click();
+		selectedRadioBtn.click(selectedRadio);
 		
 	}
 	console.log(hiddenStatus.value + " hidden in init ")

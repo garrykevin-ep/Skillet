@@ -1,0 +1,84 @@
+{% extends "coding/base.html" %}
+{% load static %}
+
+{% block head %}
+	
+	{# timer #}
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="{% static 'quiz/js/jquery.countdownTimer.min.js'  %}"></script>
+	{# end timer #}
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/clear.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/roundbox.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/problem-statement.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/table-form.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/ttypography.css' %}">
+
+{% endblock head %}
+
+{% block content %}
+	<div id="body">
+
+
+
+	<div style="position : relative;">
+			<!-- side bar start -->
+		<div id="sidebar">
+	</div>
+			<!--  side bar end -->
+
+<!-- leftbox start -->
+<div id="pageContent" class="content-with-sidebar">
+	<div class="problemindexholder">
+		<div class="problem-statement">
+		<div class="ttypography">
+
+
+
+<div class="sample-tests">
+<div class="section-title">Failed on testcase {{ith_test_case_failed}} </div>
+<div class="sample-test">
+
+	<div class="input">
+		{# <div class="title">&nbsp;</div> #}
+			<pre>{% for x in wrong_testcase %}{{x}}{% endfor %}</pre>
+	</div>
+
+</div>
+<!-- failed-test end -->
+</div>
+
+
+
+<div class="sample-tests">
+<div class="section-title">&nbsp;</div>
+<div class="sample-test">
+<div class="input">
+		<div class="title">Your Output</div>
+			<pre>{% for x in user_output %}{{x}}{% endfor %}</pre>
+	</div>
+
+	<div class="output">
+		<div class="title">Expected Output</div>
+			<pre>{% for x in expected_output %}{{x}}{% endfor %}</pre>
+	</div>
+</div>
+</div>
+</div>
+
+		<!-- ttypography end-->
+	</div>
+		<!-- problem-statement end -->
+	
+	</div>	
+	<!-- problem holder end -->
+</div>
+	<!-- leftbox end-->
+	</div>
+</div>
+<!-- id body end -->
+
+
+    </div>
+{%	endblock %}

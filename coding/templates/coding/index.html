@@ -15,6 +15,13 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/table-form.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'coding/css/ttypography.css' %}">
 
+<style type="text/css">
+	.verdict-accepted {
+	color: #0a0;
+	font-weight: bold;
+}
+</style>
+
 <script type="text/javascript">
 
 function timer () {
@@ -26,6 +33,7 @@ function timer () {
 	sec.value = x.textContent[3]+x.textContent[4];
 	console.log(min.value+" " + sec.value);
 }
+
 
 
 $(function(){
@@ -175,7 +183,7 @@ var data_file = "../../timer";
 			            {% endif %}
 			            <td>
 							{% if last_question %}
-			               <input id="finish" style="width:10em;" class="submit" name="nav" value="Finish" type="submit">
+			               <input id="finish"  style="width:10em;" class="submit" name="nav" value="Finish" type="submit">
 							{% else %}
 			               <input style="width:10em;" class="submit" name="nav" value="Next" type="submit">
 			            	{% endif %}
@@ -188,8 +196,64 @@ var data_file = "../../timer";
 				</form>
 			</div> 
 		</div>
-			<!-- 12ndside box end -->
+			<!-- 2nd side box end -->
 
+			<!-- submission box -->
+		<div class="roundbox sidebox" style="">
+            <div class="roundbox-lt">&nbsp;</div>
+            <div class="roundbox-rt">&nbsp;</div>
+        <div class="caption titled">→ Last submissions
+            <div class="top-links">
+            </div>
+        </div>
+        <table class="rtable smaller">
+            <tbody>
+            <!-- heading table-->
+                <tr>
+                    <th class="left " style="width:2.5em;">Submission</th>
+                    <th class=" " style="width:7em;">Time</th>
+                            <th class=" ">Verdict</th>
+                </tr>
+                <!-- heading table end -->
+                    
+                {% for x in user_submission %}
+                	
+                	{% if forloop.counter|divisibleby:2 == 1 %}
+                	<tr>
+                        <td class="left  dark ">
+                        <a href="{% url 'code:submission' x.id x.question.id  %}">{{x.id}}</a>
+                        </td>
+                            <td class=" dark ">{{x.rmin}}:{{x.rsec}}</td>
+                            <td class=" dark ">
+                            {% if x.ith_test_case_failed != -1 %}
+                        	<span class="verdict-rejected">Wrong answer on test</span>
+                            <span class="verdict-format-judged">{{x.ith_test_case_failed}}</span>
+                        	</td>
+                            {% else %}
+                            <span class="verdict-accepted">Accepted</span>
+                        	{% endif %}
+                            </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                         <td class="left bottom ">
+                         <a href="{% url 'code:submission' x.id x.question.id  %}">{{x.id}}</a></td>
+                        <td class="bottom ">{{x.rmin}}:{{x.rsec}}</td>
+                        <td class="bottom ">
+                        	{% if x.ith_test_case_failed != -1 %}
+                        	<span class="verdict-rejected">Wrong answer on test</span>
+                            <span class="verdict-format-judged">{{x.ith_test_case_failed}}</span>
+                            {% else %}
+                            <span class="verdict-accepted">Accepted</span>
+                        	{% endif %}
+                        </td>
+                    </tr>
+                	{% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+			<!-- submission box -->
 
 		</div>
 			<!--  side bar end -->
@@ -279,7 +343,10 @@ var data_file = "../../timer";
 
 	<div class="input">
 		{# <div class="title">&nbsp;</div> #}
-			<pre>{% for x in wrong_testcase %}{{x}}{% endfor %}</pre>
+			<pre>
+			{% for x in wrong_testcase %}
+			{{x}}<br>
+			{% endfor %}</pre>
 	</div>
 
 </div>

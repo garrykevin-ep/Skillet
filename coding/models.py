@@ -49,6 +49,9 @@ class CodeUserStatus(models.Model):
 class UserSubmission(models.Model):
 	User = models.ForeignKey(User,on_delete= models.CASCADE)
 	question = models.ForeignKey(CodeQuestion,on_delete= models.CASCADE)
-	user_output = models.FileField(upload_to='user_submission')
-	wrong_line = models.IntegerField()
-	remaining_time = models.IntegerField()
+	failed_testcase = models.TextField(blank=True,null=True)
+	expected_output = models.TextField(blank=True,null=True)
+	user_output = models.TextField(blank=True,null=True)
+	ith_test_case_failed = models.IntegerField(blank=True,null=True)
+	rmin = models.IntegerField()
+	rsec = models.IntegerField()

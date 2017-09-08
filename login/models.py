@@ -8,8 +8,9 @@ from django.db.models.signals import post_save
 #To save mark and ph_no a user
 class UserProfile(models.Model):
     user = models.OneToOneField(User,related_name= 'profile',on_delete=models.CASCADE,primary_key=True)
+    college_name = models.CharField(max_length=30)
     mark = models.IntegerField(default= 0)
-    ph_no = models.IntegerField(null = True)
+    ph_no = models.CharField(max_length=30)
     rmin = models.CharField(null=True,max_length=2,default=50)
     rsec = models.CharField(null=True,max_length=2,default=10)
     def __str__(self):

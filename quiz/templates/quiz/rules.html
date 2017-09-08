@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rules</title>
+</head>
+<body>
+<div style="margin : 0px;">
+<h2 style="margin : 0px;">Your Team id {{user}}</h2>
+<p style="margin : 0px;">Kindlly remember this is your identification</p>
+</div>
+
+<h2>Rules</h2>
+<p>
+<ul>
+	<li>You will have 30 minitues to answer 40 questions</li>
+	<li>Each question carries 1 mark.No negative marking</li>
+</ul>
+</p>	
+
+<form action="{% url 'quiz:rule' %}" method="POST">
+{% csrf_token %}
+<input type="submit" value="take test" >
+</form>
+
+</body>
+</html>

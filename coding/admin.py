@@ -21,4 +21,24 @@ class CodeQuestionAdmin(admin.ModelAdmin):
 		obj.type = 'code'
 		obj.save()
 
+
+class CodeUserStatusAdmin(admin.ModelAdmin):
+    '''
+        Admin View for CodeUserStatus
+    '''
+    list_display = ('User','question','question_status','remaining_time')
+    list_filter = ('question_status',)
+
+
+class UserSubmissionAdmin(admin.ModelAdmin):
+    '''
+        Admin View for UserSubmission
+    '''
+    list_display = ('User','question','ith_test_case_failed','rmin','rsec')
+    list_filter = ('User','question')
+
+admin.site.register(UserSubmission, UserSubmissionAdmin)
+
+admin.site.register(CodeUserStatus, CodeUserStatusAdmin)
+
 admin.site.register(CodeQuestion,CodeQuestionAdmin)

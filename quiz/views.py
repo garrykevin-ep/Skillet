@@ -121,6 +121,7 @@ def s_pop(request):
            FillStatus.objects.get_or_create(User=current_user,question= x)
         elif x.type == 'code':
             CodeUserStatus.objects.get_or_create(User=current_user,question= x)
+    return redirect('quiz:rule')
     return HttpResponseRedirect(reverse('quiz:disp',args = (first_question().id,)))
 
 
@@ -152,8 +153,8 @@ def ans(request,pk):
     question = get_object_or_404(Question,pk=pk)
     status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id)
-    #status.Qstatus = request.POST['status']
-    #status.save()
+    status.Qstatus = request.POST['status']
+    status.save()
     save_time(request,user)
     if question.type == 'mcq':
         answer_multi(request,question,user,status)
@@ -222,7 +223,7 @@ def disp_question(request,pk,current_user,question):
         return multi_fill_display(request,pk,current_user,question)
     elif question.type == 'code':
         dic = {}
-        return coding_display(request,pk,question,None)
+        return coding_display(request,pk,question)
 
 def multi_fill_display(request,pk,current_user,question):
     #get request
@@ -249,12 +250,27 @@ def disp_next_question(question,pk):
     if(next_Question != None):
             return HttpResponseRedirect(reverse('quiz:disp',args = (next_Question.id,)))
     else:
-        return redirect('login:logout')
-        #return HttpResponse("Thank You") #need to check how many left unanswerd
+        return HttpResponseRedirect(reverse('quiz:end',args = (pk,)))
 
 def timer(request):
     if request.method == 'POST':
         current_user = request.user
         user = UserProfile.objects.get(user = current_user.id)
-        save_time(user)
+        save_time(request,user)
         return HttpResponse(status=204)
+
+def end(request,pk):
+    dic = {
+    'pk' : pk,
+    }
+    return render(request,'quiz/end.html',dic)
+
+@login_required(login_url = '/')
+def rules(request):
+    if request.method == 'POST':
+        return HttpResponseRedirect(reverse('quiz:disp',args = (first_question().id,)))
+    else:
+         dic  = {
+         'user' : request.user.id,
+         }  
+         return render(request,'quiz/rules.html',dic)
