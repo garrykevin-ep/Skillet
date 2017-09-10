@@ -153,8 +153,8 @@ def ans(request,pk):
     question = get_object_or_404(Question,pk=pk)
     status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id)
-    status.Qstatus = request.POST['status']
-    status.save()
+    # status.Qstatus = request.POST['status']
+    # status.save()
     save_time(request,user)
     if question.type == 'mcq':
         answer_multi(request,question,user,status)

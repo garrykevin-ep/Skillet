@@ -130,6 +130,12 @@ var data_file = "../../timer";
    			 <div>	
        			<table class="table-form" style="width:90%;">
 			    <tbody>
+			    	<tr>
+			    		<td class="field">Get input file</td>
+			    		<td>
+			    			<a target="_blank" class="submit"style="color:black;" href="{{code.testcase_file.url}}">Download inputs</a>
+			    		</td>
+			    	</tr>
 			        <tr>
 			            <td class="field">Choose file:</td>
 			            <td>
@@ -221,7 +227,7 @@ var data_file = "../../timer";
                 	{% if forloop.counter|divisibleby:2 == 1 %}
                 	<tr>
                         <td class="left  dark ">
-                        <a href="{% url 'code:submission' x.id x.question.id  %}">{{x.id}}</a>
+                        <a target="_blank" href="{% url 'code:submission' x.id x.question.id  %}">{{x.id}}</a>
                         </td>
                             <td class=" dark ">{{x.rmin}}:{{x.rsec}}</td>
                             <td class=" dark ">
@@ -237,7 +243,7 @@ var data_file = "../../timer";
                     {% else %}
                     <tr>
                          <td class="left bottom ">
-                         <a href="{% url 'code:submission' x.id x.question.id  %}">{{x.id}}</a></td>
+                         <a target="_blank" href="{% url 'code:submission' x.id x.question.id  %}">{{x.id}}</a></td>
                         <td class="bottom ">{{x.rmin}}:{{x.rsec}}</td>
                         <td class="bottom ">
                         	{% if x.ith_test_case_failed != -1 %}

@@ -16,7 +16,7 @@ class CodeQuestionAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None,               {'fields': ['question_text']}),
 	]
-	inlines = [TestCaseInline,ExtendInline]
+	inlines = [ExtendInline,TestCaseInline]
 	def save_model(self, request, obj, form, change):
 		obj.type = 'code'
 		obj.save()

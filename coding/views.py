@@ -116,7 +116,8 @@ def coding_display(request,pk,question):
 		code = CodeQuestionExtend.objects.get(question=question)
 		testcase = CodeTestCase.objects.filter(question=question)
 		user_submission  = UserSubmission.objects.filter(User=request.user,question=question).order_by('-pk')
-
+		is_not_first_question = False
+		islast_question = False
 		if question != first_question():
 			is_not_first_question = True
 		if question == last_question():
