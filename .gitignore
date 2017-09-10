@@ -1,7 +1,7 @@
 .idea/
 env/
 *.exe
-*.sqlite3
+db.sqlite3
 *.sublime-project
 *.sublime-workspace
 *.pyc
