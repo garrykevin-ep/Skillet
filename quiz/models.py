@@ -1,8 +1,30 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+# TODO user test status
+#  
+
+class Test(models.Model):
+	name =  models.CharField(max_length=50)
+	minute = models.IntegerField()
+	second = models.IntegerField()
+	rules = models.TextField()
+	publish = models.BooleanField(default=False)
+	def __str__(self):
+		return self.name
+
+class TestStatus(models.Model):
+	user = models.ForeignKey(User,on_delete = models.CASCADE)
+	test = models.ForeignKey(Test,on_delete = models.CASCADE)
+	mark = models.IntegerField()
+	minute = models.IntegerField()
+	second = models.IntegerField()
+
+	class Meta:
+		unique_together = (('user', 'test'),)
 
 class Question(models.Model):
+	test = models.ForeignKey(Test , on_delete = models.CASCADE)
 	question_text = models.CharField(null = False,max_length= 200)
 	code = models.TextField(blank=True)
 	image = models.ImageField(blank=True)
@@ -91,3 +113,7 @@ class FillStatus(models.Model):
 	answer = models.CharField(max_length=200,blank=True)
 	#not answered -1,pre 1 or 0
 	preResult  = models.IntegerField(default=-1)
+
+#TODO 
+	# class Meta:
+	# 	unique_together = (('User', 'question'),)

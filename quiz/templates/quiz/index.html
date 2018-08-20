@@ -18,8 +18,8 @@
 
 $(function(){
 $('#ms_timer').countdowntimer({
-minutes : {{user.rmin}},
-seconds : {{user.rsec}},
+minutes : {{test_status.minute}},
+seconds : {{test_status.second}},
 size : "lg",
 expiryUrl : "/",
 });
@@ -90,7 +90,7 @@ var data_file = "../../timer";
 </div>
 
 <div class="container">
-<form action="{% url 'quiz:disp' question.id %}" method="post" onsubmit="timer()">
+<form action="{% url 'quiz:display-question' test_id question.id %}" method="post" onsubmit="timer()">
 <div class="row">
   <div class = "countdowntimer col-md-8">
     <span style="font-size : 35px;color: currentColor;" id="ms_timer"></span>

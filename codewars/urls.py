@@ -22,5 +22,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^',include('login.urls',namespace = "login")),
     url(r'^',include('quiz.urls',namespace = "quiz")),
+    url(r'^dashboard/',include('dashboard.urls',namespace = "dashboard")),
     url(r'^admin/', admin.site.urls),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -13,7 +13,7 @@ class FillChoiceInline(admin.TabularInline):
 
 class MultiAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['question_text']}),
+        (None,               {'fields': ['test','question_text']}),
         ('Code and Image', {'fields': ['code','image'], 'classes': ['collapse']}),
     ]
     inlines = [MultiChoiceInline]
@@ -21,7 +21,7 @@ class MultiAdmin(admin.ModelAdmin):
 
 class FillAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['question_text']}),
+        (None,               {'fields': ['test','question_text']}),
         ('Code and Image', {'fields': ['code','image'], 'classes': ['collapse']}),
     ]
     inlines = [FillChoiceInline]
@@ -32,3 +32,4 @@ class FillAdmin(admin.ModelAdmin):
 
 admin.site.register(MultiQuestion,MultiAdmin)
 admin.site.register(FillQuestion,FillAdmin)
+admin.site.register(Test)
