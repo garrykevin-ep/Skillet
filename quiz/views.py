@@ -220,6 +220,7 @@ def display_question(request,pk,current_user,question,test_id):
 def multi_fill_display(request,pk,current_user,question,test_id):
     #get request
     #can display multi choice or fillups
+    create_status(request,test_id)
     pre_question = prev_question(pk,test_id)
     current_status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id) 
