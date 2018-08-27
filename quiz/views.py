@@ -231,7 +231,8 @@ def display_question(request,pk,current_user,question,test_id):
 def multi_fill_display(request,pk,current_user,question,test_id):
     #get request
     #can display multi choice or fillups
-    # pre_question = prev_question(pk,test_id,current_user)
+    create_status(request,test_id)
+    pre_question = prev_question(pk,test_id)
     current_status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id) 
     dic ={
@@ -258,3 +259,22 @@ def timer(request,test_id):
         test_status = TestStatus.objects.get(user=current_user,test=test_id)
         save_time(request,test_status)
         return HttpResponse(status=204)
+
+
+def choose_test(request):
+    if request.method == "POST":
+        current_user = request.user
+        selected_test = request.POST.getlist('test')
+        print (selected_test)
+        for test in selected_test:
+            tst_instance = Test.objects.get(id=test)
+            TestStatus.objects.create(user = current_user , test = tst_instance , mark = 0 , minute = tst_instance.minute , second = tst_instance.second )
+            
+        return redirect('dashboard:board')
+    else :
+        context={}
+        test_list = Test.objects.all()
+        context['test_list']=test_list
+        template_name = 'quiz/choose_test.html'
+        return render(request , template_name , context)
+

@@ -53,12 +53,12 @@
                                 <link rel="stylesheet" href=" {% static "dashboard/ixl-layout.css" %} " type="text/css">
                                 <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12">
                                     <br>
-                                    {% for x in card %}
-                                    <a href=" {{ x.url_namespace }}">
+                                    {% for x , y  in test %}
+                                    <a href=" {{ y }}">
                                     <div class="ixel-course-box-menu col-md-3 col-xs-12">
                                     <div class="ixel-course-box-content">
                                         <br>
-                                        <h2 class="ixel-course-box-main">{{x.name}}</h2>
+                                        <h2 class="ixel-course-box-main">{{x.test.name}}</h2>
                                         <h3 class="ixel-course-box-sub"></h3>
                                     </div>
                                     </div>
