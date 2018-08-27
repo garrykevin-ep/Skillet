@@ -19,6 +19,7 @@ class TestStatus(models.Model):
 	mark = models.IntegerField()
 	minute = models.IntegerField()
 	second = models.IntegerField()
+	# status = models.BooleanField(default=False)
 
 	class Meta:
 		unique_together = (('user', 'test'),)

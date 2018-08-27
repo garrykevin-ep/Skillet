@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<form action="{% url 'quiz:choose_test' %}" method="post">
+		{% csrf_token %}
+	{% for test in test_list %}
+  	<input type="checkbox" name="test" value="{{test.id}}"> {{ test.name }}<br>
+  	{% endfor %}
+  	<input type="submit" value="Submit">
+  </form>
+</body>
+</html>

@@ -45,7 +45,7 @@ def register(request):
             #login and redirect to main page
             auth = authenticate(username = username ,password = password)
             login(request,auth)
-            return redirect('dashboard:board')
+            return redirect('quiz:choose_test')
             #return HttpResponseRedirect(reverse('quiz:index',args = (1,)))
         else:
             #when form data is wrong
