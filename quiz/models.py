@@ -9,7 +9,8 @@ class Test(models.Model):
 	minute = models.IntegerField()
 	second = models.IntegerField()
 	rules = models.TextField()
-	publish = models.BooleanField(default=False)
+	questions_count = models.IntegerField(default=1)
+	publish = models.BooleanField(default=False)# not used
 	def __str__(self):
 		return self.name
 
@@ -38,6 +39,9 @@ class Question(models.Model):
 	def __str__(self):
 		return self.question_text
 
+class QuestionOrder(models.Model):
+	user = models.ForeignKey(User, on_delete = models.CASCADE)
+	question = models.ForeignKey(Question, on_delete = models.CASCADE)
 
 #multi choice manger 
 class MultiChoiceManager(models.Manager):
