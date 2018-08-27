@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends 'quiz/base.html' %}
+{% block content %}
+	{% load static %}
 	<form action="{% url 'quiz:choose_test' %}" method="post">
 		{% csrf_token %}
 	{% for test in test_list %}
-  	<input type="checkbox" name="test" value="{{test.id}}"> {{ test.name }}<br>
+  	<input class="single-checkbox" type="checkbox" name="test" value="{{test.id}}"> {{ test.name }}<br>
   	{% endfor %}
   	<input type="submit" value="Submit">
   </form>
-</body>
-</html>
+
+
+<script type="text/javascript">
+	var limit = 1;
+	$('input.single-checkbox').on('change', function(evt) {
+   	if($(this).siblings(':checked').length >= limit) {
+       this.checked = false;
+   	}
+	});
+</script>
+{% endblock %}
+
