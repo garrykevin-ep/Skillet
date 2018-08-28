@@ -10,15 +10,5 @@ from quiz.models import TestStatus , Test
 # Create your views here.
 @login_required(login_url = '/')
 def dashboard(request):
-	test = TestStatus.objects.filter(user = request.user)
-	print (test)
-	url_instance = []
-	for test_obj in test:
-		first_ques = first_question(test_obj.test)
-		url = "/"+str(test_obj.test.id)+"/"+str(first_ques.id)+"/disp"
-		url_instance.append(url)
-	test_list = zip(test,url_instance)
-	context = {
-		"test" : test_list ,
-	}
-	return render(request,'dashboard/index.html',context)
+	test_statuses = TestStatus.objects.filter(user = request.user,completed = False)	
+	return render(request,'dashboard/index.html',{"test_statuses" : test_statuses})
