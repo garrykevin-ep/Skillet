@@ -17,7 +17,7 @@ class Test(models.Model):
 class TestStatus(models.Model):
 	user = models.ForeignKey(User,on_delete = models.CASCADE)
 	test = models.ForeignKey(Test,on_delete = models.CASCADE)
-	mark = models.IntegerField()
+	mark = models.IntegerField(default=0)
 	minute = models.IntegerField()
 	second = models.IntegerField()
 	completed = models.BooleanField(default=False)
