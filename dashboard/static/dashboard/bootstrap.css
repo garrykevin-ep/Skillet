@@ -70,9 +70,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Helvetica Neue",Helvetica
 @font-face{ 
 	font-family: 'Helvetica-Neue-LT-Pro';
 	font-weight: 400;
-	src: url('../../fonts/ixel_fonts/HelveticaNeueLTPro-Lt.woff') format('woff'),
-	     url('../../fonts/ixel_fonts/HelveticaNeueLTPro-Lt.ttf') format('truetype');
-}
+	}
 
 
 
@@ -557,7 +555,6 @@ input{
   font-family: 'Questrial';
   font-style: normal;
   font-weight: 400;
-  src: local('Questrial'), local('Questrial-Regular'), url(../fonts/questrial.woff) format('woff');
 }
 
 
