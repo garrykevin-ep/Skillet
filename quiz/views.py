@@ -268,6 +268,6 @@ def choose_test(request):
             TestStatus.objects.create(user = current_user , test = test , mark = 0 , minute = test.minute , second = test.second )
         return redirect('dashboard:board')
     else :
-        tests = TestStatus.objects.all()
+        tests = Test.objects.all()
         return render(request , 'quiz/choose_test.html' , {'tests' : tests})
 
