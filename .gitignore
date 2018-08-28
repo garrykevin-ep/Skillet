@@ -1,5 +1,6 @@
 .idea/
 env/
+migrations/
 *.exe
 *.sqlite3
 *.sublime-project
