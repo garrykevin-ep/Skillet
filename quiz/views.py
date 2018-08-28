@@ -115,6 +115,11 @@ def create_status(request,test_id):
     current_user = request.user
     test = get_object_or_404(Test,pk=test_id)
     
+    try:
+        TestStatus.objects.create(user = current_user , test = test , mark = 0 , minute = test.minute , second = test.second )
+    except IntegrityError:
+        pass
+    
     questions = Question.objects.filter(test=test_id).order_by('?')
     questions = questions[0:test.questions_count]
     
@@ -257,17 +262,4 @@ def timer(request,test_id):
         test_status = TestStatus.objects.get(user=current_user,test=test_id)
         save_time(request,test_status)
         return HttpResponse(status=204)
-
-
-def choose_test(request):
-    if request.method == "POST":
-        current_user = request.user
-        selected_tests = request.POST.getlist('test')
-        for selected_test in selected_tests:
-            test = Test.objects.get(id=selected_test)
-            TestStatus.objects.create(user = current_user , test = test , mark = 0 , minute = test.minute , second = test.second )
-        return redirect('dashboard:board')
-    else :
-        tests = Test.objects.all()
-        return render(request , 'quiz/choose_test.html' , {'tests' : tests})
 
