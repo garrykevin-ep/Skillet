@@ -36,7 +36,6 @@ class TestStatusAdmin(admin.ModelAdmin):
     '''
     list_display = ('user','test','mark','minute')
     list_filter = ('test',)
-    
     # raw_id_fields = ('',)
     # readonly_fields = ('',)
     # search_fields = ('use',)
