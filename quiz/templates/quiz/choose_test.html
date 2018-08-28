@@ -3,7 +3,7 @@
 	{% load static %}
 	<form action="{% url 'quiz:choose_test' %}" method="post">
 		{% csrf_token %}
-	{% for test in test_list %}
+	{% for test in tests %}
   	<input class="single-checkbox" type="checkbox" name="test" value="{{test.id}}"> {{ test.name }}<br>
   	{% endfor %}
   	<input type="submit" value="Submit">

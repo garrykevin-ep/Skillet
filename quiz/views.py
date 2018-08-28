@@ -100,8 +100,11 @@ def disp_next_question(test_id,current_user,question_order,question):
     if(next_Question != None):
             return HttpResponseRedirect(reverse('quiz:display-question',args = (test_id,next_Question.id,)))
     else:
-        #TODO Dashbosard
-        return redirect('login:logout')
+        test_status = get_object_or_404(TestStatus,test=test_id,user=current_user)
+        if test_status.minute == 0:
+            test_status.completed = True
+            test_status.save()
+        return redirect('dashboard:board')
         #TODO landing page
         #return HttpResponse("Thank You") #need to check how many left unanswerd
 
@@ -111,11 +114,6 @@ def disp_next_question(test_id,current_user,question_order,question):
 def create_status(request,test_id):
     current_user = request.user
     test = get_object_or_404(Test,pk=test_id)
-    
-    try:
-        TestStatus.objects.create(user=current_user,test=test,minute=test.minute,second=test.second,mark=0)
-    except IntegrityError:
-        pass
     
     questions = Question.objects.filter(test=test_id).order_by('?')
     questions = questions[0:test.questions_count]
@@ -231,8 +229,8 @@ def display_question(request,pk,current_user,question,test_id):
 def multi_fill_display(request,pk,current_user,question,test_id):
     #get request
     #can display multi choice or fillups
-    create_status(request,test_id)
-    pre_question = prev_question(pk,test_id)
+    # create_status(request,test_id)
+    # pre_question = prev_question(pk,test_id)
     current_status = get_current_status(question,current_user)
     user = UserProfile.objects.get(user = current_user.id) 
     dic ={
@@ -264,17 +262,13 @@ def timer(request,test_id):
 def choose_test(request):
     if request.method == "POST":
         current_user = request.user
-        selected_test = request.POST.getlist('test')
-        print (selected_test)
-        for test in selected_test:
-            tst_instance = Test.objects.get(id=test)
-            TestStatus.objects.create(user = current_user , test = tst_instance , mark = 0 , minute = tst_instance.minute , second = tst_instance.second )
-            
+        selected_tests = request.POST.getlist('test')
+        if TestStatus.objects.
+        for selected_test in selected_tests:
+            test = Test.objects.get(id=selected_test)
+            TestStatus.objects.create(user = current_user , test = test , mark = 0 , minute = test.minute , second = test.second )
         return redirect('dashboard:board')
     else :
-        context={}
-        test_list = Test.objects.all()
-        context['test_list']=test_list
-        template_name = 'quiz/choose_test.html'
-        return render(request , template_name , context)
+        tests = Test.objects.all()
+        return render(request , 'quiz/choose_test.html' , {'tests' : tests})
 
