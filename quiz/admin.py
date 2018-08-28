@@ -30,6 +30,19 @@ class FillAdmin(admin.ModelAdmin):
         obj.type = 'fill'
         obj.save()
 
+class TestStatusAdmin(admin.ModelAdmin):
+    '''
+        Admin View for TestStatus
+    '''
+    list_display = ('user','test','mark','minute')
+    list_filter = ('test',)
+    
+    # raw_id_fields = ('',)
+    # readonly_fields = ('',)
+    # search_fields = ('use',)
+
+admin.site.register(TestStatus, TestStatusAdmin)
+
 admin.site.register(MultiQuestion,MultiAdmin)
 admin.site.register(FillQuestion,FillAdmin)
 admin.site.register(Test)
