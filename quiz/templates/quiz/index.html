@@ -21,7 +21,7 @@ $('#ms_timer').countdowntimer({
 minutes : {{test_status.minute}},
 seconds : {{test_status.second}},
 size : "lg",
-expiryUrl : "/",
+expiryUrl : "../../../{{test_id}}/endtest",
 });
 });
 
@@ -266,8 +266,9 @@ var data_file = "../../timer";
 
 
 
-<input type ="hidden" id="minrem" name="min" value={{user.rmin}}>
-   <input type ="hidden" id="secrem" name="sec" value={{user.rsec}}>
+<input type ="hidden" id="minrem" name="min" value={{test_status.minute}}>
+
+   <input type ="hidden" id="secrem" name="sec" value={{test_status.second}}>
  </div>
 </div>
 </div><!-- cardbody -->

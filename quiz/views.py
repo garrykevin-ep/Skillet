@@ -123,7 +123,7 @@ def create_status(request,test_id):
     questions = Question.objects.filter(test=test_id).order_by('?')
     questions = questions[0:test.questions_count]
     
-    if not QuestionOrder.objects.filter(user = current_user).exists():
+    if not QuestionOrder.objects.filter(user = current_user,question__test=test_id).exists():
         for question in questions:
             QuestionOrder.objects.get_or_create(user = current_user, question = question)
             if question.type == 'mcq':
@@ -204,7 +204,7 @@ def answer_multi(request,question,test_status,status):
         selected_choice = MultiChoice.objects.get(pk=value)
     except:
         # last ans is correct , no choice selected now
-        if status.selected == get_ans_multi(question):
+        if status.selected == get_ans_multi(question).id:
             dec_mark(test_status)
         status.selected = -1
         status.save()   
@@ -237,7 +237,7 @@ def multi_fill_display(request,pk,current_user,question,test_id):
     # create_status(request,test_id)
     # pre_question = prev_question(pk,test_id)
     current_status = get_current_status(question,current_user)
-    user = UserProfile.objects.get(user = current_user.id) 
+    user = UserProfile.objects.get(user = current_user.id)
     dic ={
     'test_id' : int(test_id),
     'question' : question,
@@ -263,3 +263,11 @@ def timer(request,test_id):
         save_time(request,test_status)
         return HttpResponse(status=204)
 
+def endtest(request,test_id):
+    current_user = request.user
+    test_status = TestStatus.objects.get(user=current_user,test=test_id)
+    test_status.minute = 0
+    test_status.second = 0
+    test_status.completed = True
+    test_status.save()
+    return redirect('dashboard:board')
