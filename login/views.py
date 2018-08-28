@@ -21,7 +21,7 @@ def auth(request):
     if User is not None:
             if User.is_active:
                 login(request,User)
-                return redirect('dashboard:board')
+                return redirect('quiz:choose_test')
                 #return HttpResponseRedirect(reverse('quiz:ans',args = (first_question(),)))
     else:
         return render(request,'login/login.html',{'error_message' : "Wrong Password or You finished the test",
