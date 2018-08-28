@@ -7,3 +7,4 @@ migrations/
 *.sublime-workspace
 *.pyc
 *.DS_Store
+dump.json
