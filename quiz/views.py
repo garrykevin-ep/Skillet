@@ -263,12 +263,11 @@ def choose_test(request):
     if request.method == "POST":
         current_user = request.user
         selected_tests = request.POST.getlist('test')
-        if TestStatus.objects.
         for selected_test in selected_tests:
             test = Test.objects.get(id=selected_test)
             TestStatus.objects.create(user = current_user , test = test , mark = 0 , minute = test.minute , second = test.second )
         return redirect('dashboard:board')
     else :
-        tests = Test.objects.all()
+        tests = TestStatus.objects.all()
         return render(request , 'quiz/choose_test.html' , {'tests' : tests})
 
