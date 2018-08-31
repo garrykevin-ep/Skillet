@@ -1,0 +1,37 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+	
+<ul>
+	<li>		
+		Please click on next and choose a test.
+	</li>	
+	
+	<li>Each test has 20-30 question and a timer will start </li>
+
+<li>Don't spend more time in the dashboard, choose a test.</li>	
+
+<li>The overview contains the list of all questions with their status.
+	<ul>
+		<li>
+		Red - not answer
+		</li>
+		<li>
+		Yellow - flagged	
+		</li>
+		<li>
+		Green - Answered
+		</li>
+		
+	</ul>
+</li>
+
+
+<li>The last question has a finish button.</li>
+	</ul>
+
+	<a href=" {% url 'dashboard:board' %}">
+	<button class="btn btn-primary">next</button>
+	</a>
+	
+{% endblock content %}
