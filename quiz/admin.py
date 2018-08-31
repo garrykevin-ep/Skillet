@@ -17,6 +17,7 @@ class MultiAdmin(admin.ModelAdmin):
         ('Code and Image', {'fields': ['code','image'], 'classes': ['collapse']}),
     ]
     inlines = [MultiChoiceInline]
+    list_filter = ('test',)
 
 
 class FillAdmin(admin.ModelAdmin):
@@ -25,6 +26,7 @@ class FillAdmin(admin.ModelAdmin):
         ('Code and Image', {'fields': ['code','image'], 'classes': ['collapse']}),
     ]
     inlines = [FillChoiceInline]
+    list_filter = ('test',)
 
     def save_model(self, request, obj, form, change):
         obj.type = 'fill'
