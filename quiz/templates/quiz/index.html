@@ -90,7 +90,7 @@ var data_file = "../../timer";
 </div>
 
 <div class="container">
-<form action="{% url 'quiz:display-question' test_id question.id %}" method="post" onsubmit="timer()">
+<form id="questionform" action="{% url 'quiz:display-question' test_id question.id %}" method="post" onsubmit="timer()">
 <div class="row">
   <div class = "countdowntimer col-md-8">
     <span style="font-size : 35px;color: currentColor;" id="ms_timer"></span>
@@ -233,9 +233,9 @@ var data_file = "../../timer";
     <input type= "submit"  class = "btn btn-primary" value = "Previous" name = "nav">
     {% endif %}
     {% if question.id != last_question.id %}
-    <input type="submit" class = "btn btn-primary"  value="Next" name = "nav">
+    <input id="subbtn" type="submit" class = "btn btn-primary"  value="Next" name = "nav">
     {% else %}
-    <input type="submit" name = "nav" class="btn btn-primary" value="Finish" >  
+    <input onclick="sumbit_test()" id="subbtn" name = "nav" class="btn btn-primary" value="Finish" >  
     {% endif %}
 
 
@@ -275,5 +275,22 @@ var data_file = "../../timer";
 
 </form>
 </div>
+<script type="text/javascript">
+function sumbit_test(event)
+{
+
+  var response = confirm("Do you want to finish the test");
+  if(response == true)
+  {
+    console.log('yes')
+    $('#questionform').submit();
+  }
+  else
+  {
+      event.preventDefault()
+  }
+  
+}
+</script>
 </body>
 {% endblock %}

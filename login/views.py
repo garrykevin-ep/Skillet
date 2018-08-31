@@ -40,7 +40,9 @@ def register(request):
             
             #save phone number of a user 
             number = form.cleaned_data['phone']
-            ph_save(user,number)
+            email = form.cleaned_data['email']
+            college = form.cleaned_data['college']
+            ph_save(user,number,email,college)
             
             #login and redirect to main page
             auth = authenticate(username = username ,password = password)
@@ -49,17 +51,19 @@ def register(request):
             #return HttpResponseRedirect(reverse('quiz:index',args = (1,)))
         else:
             #when form data is wrong
-            form = RegisterForm()
-            return render(request,'login/register.html',{'error_message' : "not vaild username",'form' : form})   
+            # form = RegisterForm()
+            return render(request,'login/register.html',{'error_message' : "not vaild username",'form' : form})
     else:
         #if just display page
         form = RegisterForm()
         return render(request,'login/register.html', {'form' : form})
 
 #save phone number of a user
-def ph_save(user,number):
+def ph_save(user,number,email,college):
     usr_pro = UserProfile.objects.get(user = user.id)
     usr_pro.ph_no = number
+    usr_pro.email = email
+    usr_pro.college = college
     usr_pro.save()
 
 def first_question():

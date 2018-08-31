@@ -83,7 +83,7 @@ def get_all_status(current_user,test_id):
     mcq_list = MultiStatus.objects.filter(question__test=test_id, User=current_user)
     fill_list  = FillStatus.objects.filter(question__test=test_id, User=current_user)
     full = list(mcq_list)+list(fill_list)
-    full =  sorted(full,key=lambda x: x.question.id)
+    # full =  sorted(full,key=lambda x: x.question.id)
     return full
 
 def is_fill_correct(question,currentAnswer):
@@ -101,9 +101,9 @@ def disp_next_question(test_id,current_user,question_order,question):
             return HttpResponseRedirect(reverse('quiz:display-question',args = (test_id,next_Question.id,)))
     else:
         test_status = get_object_or_404(TestStatus,test=test_id,user=current_user)
-        if test_status.minute == 0:
-            test_status.completed = True
-            test_status.save()
+        # if test_status.minute == 0:
+        test_status.completed = True
+        test_status.save()
         return redirect('dashboard:board')
         #TODO landing page
         #return HttpResponse("Thank You") #need to check how many left unanswerd
@@ -271,3 +271,7 @@ def endtest(request,test_id):
     test_status.completed = True
     test_status.save()
     return redirect('dashboard:board')
+
+def rules(request,test_id):
+    test = get_object_or_404(Test,pk=test_id)
+    return render(request,'quiz/rules.html',{'test' : test})

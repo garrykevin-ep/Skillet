@@ -1,13 +1,50 @@
+{% extends 'quiz/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
 {% if error_message %}
 <strong>
 <p>{{error_message}}</p>
 </strong><br>
 {% endif %}
 
-<h1>Register only once</h1>
+<ul>
+	<li>Register soon and start the test</li>
+</ul>
 
+<ul>
+	<li>		
+		Please click on next and choose a test.
+	</li>	
+	
+	<li>Each test has 20-30 question and a timer will start </li>
+
+<li>Don't spend more time in the dashboard, choose a test.</li>	
+
+<li>The overview contains the list of all questions with their status.
+	<ul>
+		<li>
+		Red - not answer
+		</li>
+		<li>
+		Yellow - flagged	
+		</li>
+		<li>
+		Green - Answered
+		</li>
+		
+	</ul>
+</li>
+</ul>
+
+
+<br>
 <form action="{% url 'login:register' %}"   method="post">
 {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" name="Login" value ="login" >
+    <input class="btn btn-primary" type="submit" name="Login" value ="login" >
 </form>
+
+{% endblock content %}
