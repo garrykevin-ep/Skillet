@@ -101,9 +101,9 @@ def disp_next_question(test_id,current_user,question_order,question):
             return HttpResponseRedirect(reverse('quiz:display-question',args = (test_id,next_Question.id,)))
     else:
         test_status = get_object_or_404(TestStatus,test=test_id,user=current_user)
-        # if test_status.minute == 0:
-        test_status.completed = True
-        test_status.save()
+        if test_status.minute == 0:
+            test_status.completed = True
+            test_status.save()
         return redirect('dashboard:board')
         #TODO landing page
         #return HttpResponse("Thank You") #need to check how many left unanswerd
@@ -141,9 +141,11 @@ def disp(request,test_id,pk):
     if request.method == 'POST':
         nav = request.POST['nav']
         ans(request,test_id,pk)
+
         question_order = get_object_or_404(QuestionOrder,user=current_user,question=question)
         if nav  == 'Next' or nav == 'Finish':
             #function is just to check last question
+            print 'finish'
             return disp_next_question(test_id,current_user,question_order,question)
         elif nav == 'Previous':
             prev_q = prev_question(test_id,current_user,question_order)
